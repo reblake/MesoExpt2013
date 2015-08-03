@@ -312,6 +312,11 @@ TtlU1[5:25,]
 
 detach(AllU)
 
+
+#write.csv(TtlU1,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Sp Biomass\\TtlU1_SpBmss_Meso2013.csv", row.names=F)
+
+
+
 ##### ANOVAs 
 # ANOVA Total Underground Biomass
 library(car)
@@ -340,7 +345,7 @@ DeadRoot <- ggplot(data=DeadU, aes(x=Herbivore, y=Dry_Wgt_g, fill=Chem1)) +
                     theme(panel.grid=element_blank(),legend.key=element_blank(),
                           legend.background=element_blank(),legend.text=element_text(size=18),
                           legend.position=c(.75, .90),axis.text=element_text(size=20),
-                          axis.title=element_text(vjust=-0.01, size=14),
+                          axis.title=element_text(vjust=0.6, size=14),
                           panel.border=element_blank(),axis.line=element_line(color='black'),
                           panel.background=element_blank(),plot.background=element_blank()) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
@@ -352,7 +357,7 @@ LiveRoot <- ggplot(data=LiveU, aes(x=Chem1, y=Dry_Wgt_g, fill=Herbivore)) +
                     theme(panel.grid=element_blank(),legend.key=element_blank(),
                           legend.background=element_blank(),legend.text=element_text(size=18),
                           legend.position=c(.75, .90),axis.text=element_text(size=20),
-                          axis.title=element_text(vjust=-0.01, size=15),
+                          axis.title=element_text(vjust=0.6, size=15),
                           panel.border=element_blank(),axis.line=element_line(color='black'),
                           panel.background=element_blank(),plot.background=element_blank()) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
