@@ -16,7 +16,7 @@ plot(ALLDATA$StemHgt_cm,ALLDATA$StemDiam_mm)
 plot(ALLDATA$StemDiam_mm,ALLDATA$TtlStemNum)
 
 library(psych)
-pairs.panels(ALLDATA[,c(10:13,23,17,18,21,27:29)],smooth=F,density=T,ellipses=F,lm=T,digits=3,scale=T)
+pairs.panels(ALLDATA[,c(10:13,23,17,18,21,27:29,32:34)],smooth=F,density=T,ellipses=F,lm=T,digits=3,scale=T)
 
 ######################
 ##### SEM ############
@@ -27,6 +27,8 @@ library(lavaan)
 mod1 <- 'LiveStemDryScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
          LogDeadStemDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
          TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
+         LvRootDryWgt_Scaled ~ Oil + Corexit 
+         LogDdRootDryWgt ~ Oil + Corexit 
          SnailWgtScaled ~ Oil + Corexit                       
          LogProkAbunScaled ~ Oil + Corexit'
 # Fit the model (estimate the parameters)
@@ -66,6 +68,8 @@ semPaths(mod11_fit, "std", layout="tree3", style="lisrel", curvePivot=TRUE)
 ########## Spartina Models########################
 # Specify the model structure
 mod2 <- 'TtlStemNumScaled ~ Oil + Corexit 
+         LvRootDryWgt ~ Oil + Corexit 
+         LogDdRootDryWgt ~ Oil + Corexit 
          LiveStemDryScaled ~ Oil + Corexit + Snail + Insect
          LogDeadStemDryWgt ~ Oil + Corexit + Snail + Insect'
 # Fit the model (estimate the parameters)
