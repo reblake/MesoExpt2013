@@ -363,10 +363,39 @@ LiveRoot <- ggplot(data=LiveU, aes(x=Chem1, y=Dry_Wgt_g, fill=Herbivore)) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
 LiveRoot
 
-
-
+# Dead Roots vs. Dead Stems
+setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\")
+ALLDATA <- read.csv("ALL DATA_SEM_MesoExpt2013.csv")
+# Below is from: https://stat.ethz.ch/pipermail/r-help/2011-November/295230.html
+# Fit a linear model to the data and save the model object:
+modD <- lm(LogDdRootDryWgt~LogDeadStemDryWgt, data=ALLDATA)
+# Create a list of character strings - the first component
+# produces the fitted model, the second produces a
+# string to compute R^2, but in plotmath syntax.
+routD <- list(paste('Fitted model:',round(coef(modD)[1],3),' + ',
+                   round(coef(modD)[2],3), 'x',sep = ''),
+             paste('R^2 == ',round(summary(modD)[['r.squared']],3),
+                   sep=''))
+Dd <- ggplot(ALLDATA, aes(LogDeadStemDryWgt, LogDdRootDryWgt)) + geom_point() +
+             geom_smooth(method=lm) + #theme_boxplot() + 
+             geom_text(aes(x=.5, y=.8, label=routD[[2]]), 
+                       hjust=0, parse=TRUE)
+Dd
       
-
+# Fit a linear model to the data and save the model object:
+modL <- lm(LvRootDryWgt~LiveStemDryWgt_g, data=ALLDATA)
+# Create a list of character strings - the first component
+# produces the fitted model, the second produces a
+# string to compute R^2, but in plotmath syntax.
+routL <- list(paste('Fitted model:',round(coef(modL)[1],3),' + ',
+                   round(coef(modL)[2],3), 'x',sep = ''),
+             paste('R^2 == ',round(summary(modL)[['r.squared']],3),
+                   sep=''))
+Lv <- ggplot(ALLDATA, aes(LiveStemDryWgt_g,LvRootDryWgt)) + geom_point() +
+             geom_smooth(method=lm) + #theme_boxplot() + 
+             geom_text(aes(x=10, y=50, label=routL[[2]]), 
+                       hjust=0, parse=TRUE)
+Lv
 
 
 
