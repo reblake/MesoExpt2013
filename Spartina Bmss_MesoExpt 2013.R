@@ -302,7 +302,7 @@ DeadU <- BG[BG$Taxon %in% c("DeadRoots"),] # subset dead belowground
 AllU <- BG[BG$Taxon %in% c("LiveRoots","DeadRoots"),] ; head(AllU)
 # Aggregate to get total root mass per bucket
 attach(AllU)
-MnAllU <- aggregate(AllU[,c(8:10)], by=list(Bucket), FUN=mean, na.rm=TRUE)  # take means
+MnAllU <- aggregate(AllU[,c(8:10)], by=list(Bucket), FUN=sum, na.rm=TRUE)  # take means
 treats3 <- AllU[,c(1:6)]    # treatment columns
 TreatAllU3 <- unique(treats3)
 TreatAllU3[5:25,]
@@ -341,7 +341,7 @@ colors <- c("green","red","yellow","orange")
 
 DeadU$Chem1 <- factor(DeadU$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 DeadRoot <- ggplot(data=DeadU, aes(x=Herbivore, y=Dry_Wgt_g, fill=Chem1)) + 
-                    geom_boxplot() + theme_bw() + ylab("Dead Root Mass") +
+                    geom_boxplot() + theme_bw() + ylab("Dead Root Mass (g)") + xlab("") +
                     theme(panel.grid=element_blank(),legend.key=element_blank(),
                           legend.background=element_blank(),legend.text=element_text(size=18),
                           legend.position=c(.75, .90),axis.text=element_text(size=20),
@@ -352,16 +352,60 @@ DeadRoot <- ggplot(data=DeadU, aes(x=Herbivore, y=Dry_Wgt_g, fill=Chem1)) +
 DeadRoot
 
 LiveU$Chem1 <- factor(LiveU$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
-LiveRoot <- ggplot(data=LiveU, aes(x=Chem1, y=Dry_Wgt_g, fill=Herbivore)) + 
-                    geom_boxplot() + theme_bw() + ylab("Live Root Mass") +
+LiveRoot <- ggplot(data=LiveU, aes(x=Herbivore, y=Dry_Wgt_g, fill=Chem1)) + 
+                    geom_boxplot() + theme_bw() + ylab("Live Root Mass (g)") + xlab("") +
                     theme(panel.grid=element_blank(),legend.key=element_blank(),
                           legend.background=element_blank(),legend.text=element_text(size=18),
-                          legend.position=c(.75, .90),axis.text=element_text(size=20),
+                          legend.position=c(.85, .90),axis.text=element_text(size=20),
                           axis.title=element_text(vjust=0.6, size=15),
                           panel.border=element_blank(),axis.line=element_line(color='black'),
                           panel.background=element_blank(),plot.background=element_blank()) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
 LiveRoot
+
+TtlU1$Chem1 <- factor(TtlU1$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
+TtlRoot <- ggplot(data=TtlU1, aes(x=Herbivore, y=Dry_Wgt_g, fill=Chem1)) + 
+                    geom_boxplot() + theme_bw() + ylab("Total Root Mass (g)") + xlab("") +
+                    theme(panel.grid=element_blank(),legend.key=element_blank(),
+                          legend.background=element_blank(),legend.text=element_text(size=18),
+                          legend.position=c(.85, .90),axis.text=element_text(size=20),
+                          axis.title=element_text(vjust=0.6, size=15),
+                          panel.border=element_blank(),axis.line=element_line(color='black'),
+                          panel.background=element_blank(),plot.background=element_blank()) +
+                     scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
+TtlRoot
+
+DeadRootRatio <- ggplot(data=TtlU2, aes(x=Herbivore, y=Ratio_UG, fill=Chem1)) + 
+                        geom_boxplot() + theme_bw() + ylab("Proportion Dead Roots (g)") + xlab("") +
+                        theme(panel.grid=element_blank(),legend.key=element_blank(),
+                              legend.background=element_blank(),legend.text=element_text(size=18),
+                              legend.position=c(.85, .90),axis.text=element_text(size=20),
+                              axis.title=element_text(vjust=0.6, size=15),
+                              panel.border=element_blank(),axis.line=element_line(color='black'),
+                              panel.background=element_blank(),plot.background=element_blank()) +
+                        scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
+DeadRootRatio
+
+
+
+################################
+# Above- and Belowground Biomass comparisons and relationships
+
+# Ratio of live to dead
+
+
+# Above
+
+# Below
+Live <- LiveU$Dry_Wgt_g
+TtlU1$Live_UG <- Live
+
+Dead <- DeadU$Dry_Wgt_g
+TtlU1$Dead_UG <- Dead
+
+TtlU2 <- mutate(TtlU1, Ratio_UG=Dead_UG/Live_UG)
+
+
 
 # Dead Roots vs. Dead Stems
 setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\")
@@ -381,7 +425,8 @@ Dd <- ggplot(ALLDATA, aes(LogDeadStemDryWgt, LogDdRootDryWgt)) + geom_point() +
              geom_text(aes(x=.5, y=.8, label=routD[[2]]), 
                        hjust=0, parse=TRUE)
 Dd
-      
+
+# Live Roots vs. Live Stems
 # Fit a linear model to the data and save the model object:
 modL <- lm(LvRootDryWgt~LiveStemDryWgt_g, data=ALLDATA)
 # Create a list of character strings - the first component
