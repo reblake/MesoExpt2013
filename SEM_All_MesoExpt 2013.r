@@ -6,6 +6,7 @@
 
 setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\")
 
+# read in data
 ALLDATA <- read.csv("ALL DATA_SEM_MesoExpt2013.csv")
 names(ALLDATA)
 str(ALLDATA)
