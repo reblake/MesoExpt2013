@@ -439,7 +439,7 @@ Lv <- ggplot(ALLDATA, aes(LiveStemDryWgt_g,LvRootDryWgt)) + geom_point() +
                        hjust=0, parse=TRUE)
 Lv
 
-
+################# Maybe look at proportion dead 
 
 
 
