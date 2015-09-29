@@ -10,13 +10,18 @@ ALLDATA <- read.csv("ALL DATA_SEM_MesoExpt2013.csv")
 names(ALLDATA)
 str(ALLDATA)
 
+# Explore data a little
 plot(ALLDATA$SnailWgt_per_Day,ALLDATA$TtlStemNum)
 plot(ALLDATA$StemHgt_cm,ALLDATA$TtlStemNum)
 plot(ALLDATA$StemHgt_cm,ALLDATA$StemDiam_mm)
 plot(ALLDATA$StemDiam_mm,ALLDATA$TtlStemNum)
 
+# Look at correlated variables
 library(psych)
 pairs.panels(ALLDATA[,c(10:13,23,17,18,21,27:29,32:34)],smooth=F,density=T,ellipses=F,lm=T,digits=3,scale=T)
+# NOTE: Live Stem Bmss and Total Stem Bmss 1:1, so use Live Stem and Dead Stem, not total
+
+
 
 ######################
 ##### SEM ############
@@ -26,9 +31,11 @@ library(lavaan)
 ########## Global Model - specify the model structure
 mod1 <- 'LiveStemDryScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
          LogDeadStemDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
-         TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
+         LvRootDryWgt_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
+         LogDdRootDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
          SnailWgtScaled ~ Oil + Corexit                       
          LogProkAbunScaled ~ Oil + Corexit'
+         #TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
 # Fit the model (estimate the parameters)
 mod1_fit <- sem(mod1, data=ALLDATA)
 # Output a summary of the computed results
@@ -46,10 +53,10 @@ mod11 <- 'TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled
           LogDeadStemDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           Photo_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           Fv.Fm_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
-          SnailWgtScaled ~  Corexit + LiveStemDryScaled + TtlStemNumScaled +
-                            Photo_Scaled + Fv.Fm_Scaled
-          LogProkAbunScaled ~ Oil + LiveStemDryScaled + TtlStemNumScaled + 
-                              Photo_Scaled + Fv.Fm_Scaled'
+          LvRootDryWgt_Scaled ~ Oil + Corexit + LogProkAbunScaled
+          LogDdRootDryWgt ~ Oil + Corexit +  LogProkAbunScaled
+          SnailWgtScaled ~  Corexit + LiveStemDryScaled + TtlStemNumScaled 
+          LogProkAbunScaled ~ Oil + LiveStemDryScaled + Photo_Scaled + Fv.Fm_Scaled'
 # Fit the model (estimate the parameters)
 mod11_fit <- sem(mod11, data=ALLDATA)
 # Output a summary of the computed results
@@ -67,7 +74,9 @@ semPaths(mod11_fit, "std", layout="tree3", style="lisrel", curvePivot=TRUE)
 # Specify the model structure
 mod2 <- 'TtlStemNumScaled ~ Oil + Corexit 
          LiveStemDryScaled ~ Oil + Corexit + Snail + Insect
-         LogDeadStemDryWgt ~ Oil + Corexit + Snail + Insect'
+         LogDeadStemDryWgt ~ Oil + Corexit + Snail + Insect
+         LvRootDryWgt_Scaled ~ 
+         LogDdRootDryWgt ~ '
 # Fit the model (estimate the parameters)
 mod2_fit <- sem(mod2, data=ALLDATA)
 # Output a summary of the computed results
