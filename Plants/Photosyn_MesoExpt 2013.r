@@ -4,77 +4,81 @@
 ##  Script by Rachael Blake, September 2013                 ##
 ##############################################################
 
+# Load libraries
+library(dplyr) ; library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
+library(car)  
+
+# Set working directory
 setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\")
 
+# Read in data file of all photosynthesis data
 PhotoALL <- read.csv("LICOR_PhotosynMeas_MesoExpt 2013.csv")
-names(PhotoALL)
-head(PhotoALL)
-tail(PhotoALL)
+names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
-####Taking Mean of the three measurements in each bucket#######
-
-# Convert the date column so it can be used in R
-PhotoALL$Date1 <- as.Date(PhotoALL$Date, format="%d-%b") 
+# dplyr() doesn't like dates, so leaving this column as factors, 
+# but don't want to lose how I changed output format of as.Date.
+#PhotoALL$Date <- format(as.Date(PhotoALL$Date, format="%d-%b"),"%d-%b-2013") 
 
 # REMOVE May 20th LIGHT data..it is wacky for some reason I can't figure out
 #PhotoALL1 <- PhotoALL[!PhotoALL$Date %in% c("20-May"),]
 
-
-attach(PhotoALL)
-#Taking means of all values
-meanp <- aggregate(PhotoALL[,-c(1:9)], by=list(Date,MeasType,Bucket.Number), FUN=mean, na.rm=FALSE)
-library(plyr) ; meanp1 <- arrange(meanp, Group.3, Date1, Group.2) #sorts data by bucket and date
-meanp1[1:50,]
-
-#Getting the treatment columns
-TreatAllp <- PhotoALL[,c(91,1,2,4:9)]
-TreatAllpp <- arrange(TreatAllp, Bucket.Number, Date1, MeasType) 
-TreatAllpp[1:30,]  
-TreatSAllp <- unique(TreatAllpp)
-TreatSAllp[1:50,]
-tail(TreatSAllp)
-
-#Binding the treatment columns with the data columns
-#Pmn <- meanp[,-c(1:3)]
-PMean <- cbind(TreatSAllp, meanp1)
-PMean[25:50,1:12]
-
-detach(PhotoALL)
-
-write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
+# Taking Mean of the three measurements in each bucket #######
+PMean <- PhotoALL %>%
+         group_by(Date,MeasType,Bucket.Number) %>%
+         summarise_each(funs(mean),-HHMMSS,-Treatment,-Chem,-Oil,-Corexit,-Herbivore) %>%
+         ungroup()
+  
+#write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
 
 #############################################################
-#############################################################
+# Subsetting the data
 
-PMean1 <- read.csv("LICOR_Photo_Mean_MesoExpt2013.csv")
+InitialLight <- PMean %>%
+                filter(MeasType=="Light",
+                       Date %in% c("20-May","21-May","23-May","24-May"))
+
+InitialDark <- PMean %>%
+               filter(MeasType=="Dark",
+                      Date %in% c("20-May","21-May","23-May","24-May"))
+
+Wk2Light <- PMean %>%
+            filter(MeasType=="Light",
+                   Date %in% c("27-May","28-May","30-May","31-May"))
+
+Wk2Dark <- PMean %>%
+           filter(MeasType=="Dark",
+                  Date %in% c("27-May","28-May","30-May","31-May")) 
+
+Wk3Light <- PMean %>%
+            filter(MeasType=="Light",
+                   Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"))
+
+Wk3Dark <- PMean %>%
+           filter(MeasType=="Dark",
+                  Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"))
+  
+FinalLight <- PMean %>%
+              filter(MeasType=="Light",
+                     Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"))
+
+FinalDark <- PMean %>%
+             filter(MeasType=="Dark",
+                    Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"))
+
+#############################################################
 
 # Just looking at the data
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
-qplot(y=PhiPS2, x=Fv..Fm., data=PMean1)
-qplot(y=PhiPS2, x=PhiCO2, data=PMean1)
-
-# Subsetting for the Light and Dark measurements
-Light <- PMean1[PMean1$MeasType=="Light",]  ;  Light[1:30,]
-Dark <- PMean1[PMean1$MeasType=="Dark",]  ;  Dark[1:30,]
+qplot(y=PhiPS2, x=Fv..Fm., data=PMean)
+qplot(y=PhiPS2, x=PhiCO2, data=PMean)
 
 
 ###### FINAL DATA (END OF EXPERIMENT) #########################
-
-#subsetting final light data
-FinalLight <- Light[Light$Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"),]
-head(FinalLight) ; tail(FinalLight)
-  
-#subsetting final dark data
-FinalDark <- Dark[Dark$Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"),]   
-head(FinalDark)
 
 # Looking at data
 qplot(x=FinalLight$Fv..Fm.,y=FinalLight$PhiPS2)
 
 
 ## Plotting the final data
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
-#
 FinalLight$Chem1 <- factor(FinalLight$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 # Photosynthesis
 LightPlot <- ggplot(data=FinalLight, aes(x=Herbivore, y=Photo, fill=Chem1)) + 
@@ -121,7 +125,7 @@ DarkPlot <- ggplot(data=FinalDark, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Ch
 options(contrasts=c("contr.sum","contr.poly"))
 #options(contrasts=c("contr.treatment","contr.poly"))
 
-library(car)  
+
 
 FnlLightA <- lm(Photo ~ Oil*Corexit*Herbivore, data=FinalLight)
              #contrasts=list(Oil=contr.sum, Corexit=contr.sum, Herbivore=contr.sum))
@@ -152,15 +156,6 @@ Anova(FnlDarkA, type="III") # calculates ANOVA table with Type III SS
 
 ###### INITIAL DATA (WEEK 1 OF EXPERIMENT) #########################
 
-#subsetting initial light data
-#NOTE: Use "Light" subsetted above
-InitialLight <- Light[Light$Date %in% c("20-May","21-May","23-May","24-May"),]
-head(InitialLight)
-  
-#subsetting initial dark data
-#NOTE: Use "Dark" subsetted above
-InitialDark <- Dark[Dark$Date %in% c("20-May","21-May","23-May","24-May"),]   
-head(InitialDark)
 
 # Looking at data
 qplot(x=InitialLight$Fv..Fm.,y=InitialLight$PhiPS2)
@@ -229,15 +224,6 @@ Anova(InitDarkA, type="III") # calculates ANOVA table with Type III SS
 
 
 ###### DATA FROM WEEK 2 OF EXPERIMENT #########################
-#subsetting week 2 light data
-#NOTE: Use "Light" subsetted above
-Wk2Light <- Light[Light$Date %in% c("27-May","28-May","30-May","31-May"),]
-head(Wk2Light)
-  
-#subsetting week 2 dark data
-#NOTE: Use "Dark" subsetted above
-Wk2Dark <- Dark[Dark$Date %in% c("27-May","28-May","30-May","31-May"),]   
-head(Wk2Dark)
 
 # Looking at data
 qplot(x=Wk2Light$Fv..Fm.,y=Wk2Light$PhiPS2)
@@ -320,15 +306,6 @@ Anova(Wk2DarkA, type="III") # calculates ANOVA table with Type III SS
 
 
 ###### DATA FROM WEEK 3 OF EXPERIMENT #########################
-#subsetting week 3 light data
-#NOTE: Use "Light" subsetted above
-Wk3Light <- Light[Light$Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"),]
-head(Wk3Light)
-  
-#subsetting week 3 dark data
-#NOTE: Use "Dark" subsetted above
-Wk3Dark <- Dark[Dark$Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"),]   
-head(Wk3Dark)
 
 # Looking at data
 qplot(x=Wk3Light$Fv..Fm.,y=Wk3Light$PhiPS2)
