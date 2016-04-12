@@ -5,14 +5,15 @@
 ##############################################################
 
 # Load libraries
-library(dplyr) ; library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
+library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scales)
 library(car)  
 
 # Set working directory
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\")
+#setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\")
 
 # Read in data file of all photosynthesis data
-PhotoALL <- read.csv("LICOR_PhotosynMeas_MesoExpt 2013.csv")
+PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/
+                     LICOR_PhotosynMeas_MesoExpt_2013.csv")
 names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
 # dplyr() doesn't like dates, so leaving this column as factors, 
@@ -65,7 +66,7 @@ FinalDark <- PMean %>%
              filter(MeasType=="Dark",
                     Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"))
 
-#############################################################
+###############################################################
 
 # Just looking at the data
 qplot(y=PhiPS2, x=Fv..Fm., data=PMean)
