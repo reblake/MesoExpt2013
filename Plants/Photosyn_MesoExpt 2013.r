@@ -6,14 +6,13 @@
 
 # Load libraries
 library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scales)
-library(car)  
+library(car) 
 
 # Set working directory
-#setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\")
+#setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR_Files_Meso_Expt\\")
 
 # Read in data file of all photosynthesis data
-PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/
-                     LICOR_PhotosynMeas_MesoExpt_2013.csv")
+PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
 names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
 # dplyr() doesn't like dates, so leaving this column as factors, 
@@ -25,9 +24,10 @@ names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
 # Taking Mean of the three measurements in each bucket #######
 PMean <- PhotoALL %>%
-         group_by(Date,MeasType,Bucket.Number) %>%
-         summarise_each(funs(mean),-HHMMSS,-Treatment,-Chem,-Oil,-Corexit,-Herbivore) %>%
+         group_by(Date,MeasType,Bucket.Number,Treatment,Chem,Oil,Corexit,Herbivore) %>%
+         summarise_each(funs(mean),-HHMMSS) %>%
          ungroup()
+         
   
 #write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
 
@@ -80,15 +80,18 @@ qplot(x=FinalLight$Fv..Fm.,y=FinalLight$PhiPS2)
 
 
 ## Plotting the final data
+colors <- c("green","red","yellow","orange")
 FinalLight$Chem1 <- factor(FinalLight$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 # Photosynthesis
 LightPlot <- ggplot(data=FinalLight, aes(x=Herbivore, y=Photo, fill=Chem1)) + 
                     geom_boxplot() + theme_bw() +
                     theme(panel.grid=element_blank(),legend.key=element_blank(),
-                           legend.background=element_blank(),legend.text=element_text(size=18),
-                           legend.position=c(.95, .85),axis.text=element_text(size=20),
-                           panel.border=element_blank(),axis.line=element_line(color='black'),
-                           panel.background=element_blank(),plot.background=element_blank()) +
+                          legend.background=element_blank(),legend.text=element_text(size=18),
+                          legend.position=c(.95, .85),axis.text=element_text(size=20),
+                          panel.border=element_blank(),axis.line=element_line(color='black'),
+                          panel.background=element_blank(),plot.background=element_blank(),
+                          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))         
 # Photochemical quenching
 LightPlota <- ggplot(data=FinalLight, aes(x=Herbivore, y=as.numeric(qP), fill=Chem1)) + 
@@ -101,7 +104,9 @@ LightPlotb <- ggplot(data=FinalLight, aes(x=Herbivore, y=as.numeric(qN), fill=Ch
                            legend.background=element_blank(),legend.text=element_text(size=18),
                            legend.position=c(.1, .85),axis.text=element_text(size=20),
                            panel.border=element_blank(),axis.line=element_line(color='black'),
-                           panel.background=element_blank(),plot.background=element_blank()) +
+                           panel.background=element_blank(),plot.background=element_blank(),
+                           axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))         
 # Phi PSII
 LightPlotc <- ggplot(data=FinalLight, aes(x=Herbivore, y=as.numeric(PhiPS2), fill=Chem1)) + 
@@ -117,8 +122,10 @@ DarkPlot <- ggplot(data=FinalDark, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Ch
                          legend.background=element_blank(),legend.text=element_text(size=18),
                          legend.position=c(.1, .2),axis.text=element_text(size=20),
                          panel.border=element_blank(),axis.line=element_line(color='black'),
-                         panel.background=element_blank(),plot.background=element_blank()) +
-                     scale_fill_manual(values=colors, guide=guide_legend(title = NULL))         
+                         panel.background=element_blank(),plot.background=element_blank(),
+                         axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                         axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                    scale_fill_manual(values=colors, guide=guide_legend(title = NULL))         
 
 
 # Final Photosynthesis (Light) ANOVA
@@ -163,8 +170,6 @@ qplot(x=InitialLight$Fv..Fm.,y=InitialLight$PhiPS2)
 
 
 ## Plotting the initial data
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
-#
 InitialLight$Chem1 <- factor(InitialLight$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 # Photosynthesis
 LightPlot2 <- ggplot(data=InitialLight, aes(x=Herbivore, y=Photo, fill=Chem1)) + 
@@ -175,9 +180,18 @@ LightPlot2a <- ggplot(data=InitialLight, aes(x=Herbivore, y=as.numeric(qP), fill
                       geom_boxplot() + theme_bw() +
                       theme(panel.grid=element_blank())
 # Nonphotochemical quenching
+colors <- c("green","red","yellow","orange")
 LightPlot2b <- ggplot(data=InitialLight, aes(x=Herbivore, y=as.numeric(qN), fill=Chem1)) + 
-                      geom_boxplot() + theme_bw() +
-                      theme(panel.grid=element_blank())
+                      geom_boxplot() + theme_bw() + scale_fill_manual(values=colors) +
+                      theme(panel.grid=element_blank(),legend.key=element_blank(),
+                            legend.title=element_blank(),
+                            legend.background=element_blank(),legend.text=element_text(size=18),
+                            legend.position=c(.1, .2),axis.text=element_text(size=20),
+                            panel.border=element_blank(),axis.line=element_line(color='black'),
+                            panel.background=element_blank(),plot.background=element_blank(),
+                            axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                            axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
+
 # Phi PSII
 LightPlot2c <- ggplot(data=InitialLight, aes(x=Herbivore, y=as.numeric(PhiPS2), fill=Chem1)) + 
                       geom_boxplot() + theme_bw() +
@@ -192,14 +206,14 @@ DarkPlot2 <- ggplot(data=InitialDark, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill
                           legend.background=element_blank(),legend.text=element_text(size=18),
                           legend.position=c(.1, .2),axis.text=element_text(size=20),
                           panel.border=element_blank(),axis.line=element_line(color='black'),
-                          panel.background=element_blank(),plot.background=element_blank())
+                          panel.background=element_blank(),plot.background=element_blank(),
+                          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
 
 # Initial Photosynthesis (Light) ANOVA
 # ANOVA TYPE III SS
 options(contrasts=c("contr.sum","contr.poly"))
 #options(contrasts=c("contr.treatment","contr.poly"))
-
-library(car)  
 
 InitLightA <- lm(Photo ~ Oil*Corexit*Herbivore, data=InitialLight)
 summary(InitLightA)#$coeff  # give summary of all coefficients - useful to see what's missing
@@ -231,8 +245,6 @@ qplot(x=Wk2Light$Fv..Fm.,y=Wk2Light$PhiPS2)
 
 
 ## Plotting the Week 2 data
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
-#
 colors <- c("green","red","yellow","orange")
 Wk2Light$Chem1 <- factor(Wk2Light$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 # Photosynthesis
@@ -242,7 +254,9 @@ LightPlot3 <- ggplot(data=Wk2Light, aes(x=Herbivore, y=Photo, fill=Chem1)) +
                            legend.background=element_blank(),legend.text=element_text(size=18),
                            legend.position=c(.95, .85),axis.text=element_text(size=20),
                            panel.border=element_blank(),axis.line=element_line(color='black'),
-                           panel.background=element_blank(),plot.background=element_blank()) +
+                           panel.background=element_blank(),plot.background=element_blank(),
+                           axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                      scale_fill_manual(values=colors, guide=guide_legend(title = NULL))                   
 #ggsave(file="Wk2Photo.tiff", plot=LightPlot3, path="C:/Users/rblake/Desktop/")  
 # Photochemical quenching 
@@ -258,7 +272,9 @@ LightPlot3b <- ggplot(data=Wk2Light, aes(x=Herbivore, y=as.numeric(qN), fill=Che
                            legend.background=element_blank(),legend.text=element_text(size=18),
                            legend.position=c(.95, .85),axis.text=element_text(size=20),
                            panel.border=element_blank(),axis.line=element_line(color='black'),
-                           panel.background=element_blank(),plot.background=element_blank()) +
+                           panel.background=element_blank(),plot.background=element_blank(),
+                           axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                       scale_fill_manual(values=colors, guide=guide_legend(title = NULL)) 
 
 # Phi PSII
@@ -280,8 +296,7 @@ DarkPlot3 <- ggplot(data=Wk2Dark, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Che
 # ANOVA TYPE III SS
 options(contrasts=c("contr.sum","contr.poly"))
 #options(contrasts=c("contr.treatment","contr.poly"))
-
-library(car)  
+ 
 # Photosynthesis
 Wk2LightA <- lm(Photo ~ Oil*Corexit*Herbivore, data=Wk2Light)
 Anova(Wk2LightA, type="III") # calculates ANOVA table with Type III SS
@@ -393,7 +408,7 @@ Anova(Wk3DarkA, type="III") # calculates ANOVA table with Type III SS
 # coefficients.  Methods in Ecology & Evolution 1:103-113.
 #########################################
 # must read in PMean first, and create Final Light and Final Dark - see above
-head(PMean1)
+head(PMean)
 head(FinalLight)
 head(FinalDark)
 head(InitialLight)
@@ -406,9 +421,9 @@ head(Wk3Dark)
 
 ## Final Week 8 data
 # center and scale all data to get effect sizes
-sc_fl <- scale(FinalLight[,c(12:33)], center=T, scale=T)
+sc_fl <- scale(FinalLight[,c(11:33)], center=T, scale=T)
 head(sc_fl)
-FnlLgt_sc <- cbind(FinalLight[,c(1:10)], sc_fl)
+FnlLgt_sc <- cbind(FinalLight[,c(1:9)], sc_fl)
 head(FnlLgt_sc)
 
 Photo8_effsz <- lm(Photo ~ Oil*Corexit*Herbivore, data=FnlLgt_sc)
@@ -417,9 +432,9 @@ summary(Photo8_effsz)
 
 ## Initial Week 1 data
 # center and scale all data to get effect sizes
-sc_in <- scale(InitialLight[,c(12:33)], center=T, scale=T)
+sc_in <- scale(InitialLight[,c(11:33)], center=T, scale=T)
 head(sc_in)
-InLgt_sc <- cbind(InitialLight[,c(1:10)], sc_in)
+InLgt_sc <- cbind(InitialLight[,c(1:9)], sc_in)
 head(InLgt_sc)
 
 Photo1_effsz <- lm(Photo ~ Oil*Corexit*Herbivore, data=InLgt_sc)
