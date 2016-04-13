@@ -3,10 +3,10 @@
 ###  Script by Rachael E. Blake
 ###  Sept. 2014
 ######################################
+library(ggplot2) ; library(plyr) ; library(grid) ; library(scales) ; library(reshape2)
 
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Oiling stuff")
 
-OI <- read.csv("OilConc_FINAL_MesoExpt 2013.csv")
+OI <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Oiling stuff/OilConc_FINAL_MesoExpt 2013.csv")
 head(OI)
 tail(OI)
 names(OI)
@@ -14,8 +14,6 @@ names(OI)
 OI_red <- OI[-c(53,54),] # These are the samples Buffy Meyer thinks were switched or mis-labeled.
 names(OI_red)
 
-
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales) ; library(reshape2)
 
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
@@ -30,15 +28,19 @@ theme_boxplot <- function(base_size = 12){
           panel.border=element_rect(colour='black', fill = NA),
           panel.margin=unit(0,"lines"),
           axis.ticks.length=unit(1,"mm"),
-          axis.ticks.margin = unit(0, "lines"),
+          axis.text.x = element_text(margin=margin(0,0,0,0, "lines")),
+          axis.text.y = element_text(margin=margin(0,0,0,0,"lines")),
           axis.text=element_text(size=15),
           axis.title.x=element_text(hjust=.55, vjust=-.01, size=17),
           axis.title.y=element_text(size=17, angle=90, hjust=.56, vjust=-.001),
           panel.grid.major=element_blank(),
           panel.grid.minor=element_blank(),
           strip.text.x=element_text(size=14),
-          strip.background=element_rect(colour='black', fill='white'))
+          strip.background=element_rect(colour='black', fill='white'),
+          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
 }  
+
 ##########################################
 ##########
 
@@ -51,7 +53,7 @@ TtlAlk <- ggplot(data=OI, aes(x=Herbivore, y=Total.Alkanes, fill=Chem1)) +
                  theme(legend.background=element_blank(),
                        legend.text=element_text(size=18), legend.position=c(.95, .85),
                        axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
-                       panel.border=element_blank(),axis.line=element_line(color='black')) +
+                       panel.border=element_blank(), axis.line=element_line(color='black')) +
                  scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
 TtlAlk
 
@@ -66,24 +68,14 @@ TtlAro <- ggplot(data=OI, aes(x=Herbivore, y=Total.Aromatics, fill=Chem1)) +
 TtlAro
 
 ########## Taking the Mean of the values for each time step for each treatment
-attach(OI)
-#Taking means of all values
-meanAK <- aggregate(OI[,c(10,11)], by=list(Time_Step, Chem), FUN=mean, na.rm=FALSE)
-library(plyr) ; meanAK1 <- arrange(meanAK, Group.1) #sorts data by Time_Step
-meanAK1
+AKMean <- OI %>%
+          select(Date,Time_Step, Chem, Oil, Corexit, Total.Alkanes, Total.Aromatics) %>%
+          group_by(Date,Time_Step, Chem, Oil, Corexit) %>%
+          summarise_each(funs(mean)) %>%
+          ungroup()
+         
 
-#Getting the treatment columns
-TreatOIAK <- OI[,c(2,3,6:7)]
-TreatOIAKK <- arrange(TreatOIAK, Time_Step, Chem) 
-TreatOIAKK  
-TreatSOIAK <- unique(TreatOIAKK)
-TreatSOIAK
 
-#Binding the treatment columns with the data columns
-AKMean <- cbind(TreatSOIAK, meanAK1[,c(3:4)])
-AKMean
-
-detach(OI)
 #############
 colors <- c("NC"="green","Core"="red","Oil"="yellow","OilCore"="orange")
 # Alkanes over Time
@@ -115,35 +107,24 @@ EndOil1 <- arrange(EndOil, Chem, Herbivore)
 EndOil1
 
 # plant data
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\")
-
-Means <- read.csv("ALL DATA_SEM_MesoExpt2013.csv")
+Means <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
 head(Means)
 str(Means)
 names(Means)
 
 arrange(Means[,c(2,4,7,18,19)], Chem, Herbivore)
 
-#############
-attach(Means)
-#Taking means of all values
-mean_all <- aggregate(Means[,c(10:19,27:29)], by=list(Chem, Herbivore), FUN=mean, na.rm=FALSE)
-library(plyr) ; mean_all1 <- arrange(mean_all, Group.1) #sorts data by 
-mean_all1
-mean_all1[,c(1,2,12)]
+Means_every <- Means %>%
+               select(-Bucket, -Treat, -Snail, -Insect, 
+                      -ProkAbunScaled, -LogProkAbunScaled, -SqrtProkAbunScaled,
+                      -LogDeadStemDryWgt, -LiveStemDryScaled, -TtlStemNumScaled,
+                      -SnailWgtScaled,-Photo_Scaled, -Fv.Fm_Scaled, -LvRootDryWgt, 
+                      -DdRootDryWgt, -LogDdRootDryWgt, -LvRootDryWgt_Scaled) %>%
+               group_by(Week, Chem, Oil, Corexit, Herbivore) %>%
+               summarise_each(funs(mean)) %>%
+               ungroup() %>%
+               arrange(Week, Chem, Herbivore)
 
-#Getting the treatment columns
-TreatM <- Means[,c(1,4:7)]
-TreatMs <- arrange(TreatM, Chem, Herbivore) 
-TreatMs 
-TreatSMs <- unique(TreatMs)
-TreatSMs
-
-#Binding the treatment columns with the data columns
-Means_every <- cbind(TreatSMs, mean_all1[,-c(1,2)])
-Means_every
-
-detach(Means)
 #############
 
 MeansOilPhoto <- cbind(EndOil1[,c(1:11)], Means_every)
@@ -152,13 +133,13 @@ MeansOilPhoto[,c(4,6,9,13,16,25,26)]
 
 # Alkanes with Photosynthesis
 PAk <- ggplot(MeansOilPhoto, aes(y=Photo, x=Total.Alkanes)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
-               geom_smooth() +
-               theme(legend.key=element_blank(), legend.background=element_blank(),
-                     legend.text=element_text(size=18), legend.position=c(.95, .85),
-                     axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
-                     panel.border=element_blank(),axis.line=element_line(color='black'),
-                     panel.background=element_blank())
+             geom_point(shape=5, size=4) + theme_boxplot() +
+             geom_smooth() +
+             theme(legend.key=element_blank(), legend.background=element_blank(),
+                   legend.text=element_text(size=18), legend.position=c(.95, .85),
+                   axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
+                   panel.border=element_blank(),axis.line=element_line(color='black'),
+                   panel.background=element_blank())
 PAk
 
 # Fit a linear model to the data and save the model object:
@@ -179,13 +160,13 @@ PAk2
 
 # Aromatics with Photosynthesis
 PAr <- ggplot(MeansOilPhoto, aes(y=Photo, x=Total.Aromatics)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
-               geom_smooth() +
-               theme(legend.key=element_blank(), legend.background=element_blank(),
-                     legend.text=element_text(size=18), legend.position=c(.95, .85),
-                     axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
-                     panel.border=element_blank(),axis.line=element_line(color='black'),
-                     panel.background=element_blank())
+             geom_point(shape=5, size=4) + theme_boxplot() +
+             geom_smooth() +
+             theme(legend.key=element_blank(), legend.background=element_blank(),
+                   legend.text=element_text(size=18), legend.position=c(.95, .85),
+                   axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
+                   panel.border=element_blank(),axis.line=element_line(color='black'),
+                   panel.background=element_blank())
 PAr
 
 #
@@ -203,7 +184,7 @@ PAr2
 ###############
 # Fv / Fm 
 FAk <- ggplot(MeansOilPhoto, aes(y=Fv.Fm, x=Total.Alkanes)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -213,7 +194,7 @@ FAk <- ggplot(MeansOilPhoto, aes(y=Fv.Fm, x=Total.Alkanes)) +
 FAk
 #
 FAr <- ggplot(MeansOilPhoto, aes(y=Fv.Fm, x=Total.Aromatics)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -226,7 +207,7 @@ FAr
 ###############
 # Live Stem Dry Weight
 LvStmAk <- ggplot(MeansOilPhoto, aes(y=LiveStemDryWgt_g, x=Total.Alkanes)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -236,7 +217,7 @@ LvStmAk <- ggplot(MeansOilPhoto, aes(y=LiveStemDryWgt_g, x=Total.Alkanes)) +
 LvStmAk
 #
 LvStmAr <- ggplot(MeansOilPhoto, aes(y=LiveStemDryWgt_g, x=Total.Aromatics)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -248,7 +229,7 @@ LvStmAr
 ################
 # Dead Stem Dry Weight
 DdStmAk <- ggplot(MeansOilPhoto, aes(y=DeadStemDryWgt_g, x=Total.Alkanes)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -258,7 +239,7 @@ DdStmAk <- ggplot(MeansOilPhoto, aes(y=DeadStemDryWgt_g, x=Total.Alkanes)) +
 DdStmAk
 #
 DdStmAr <- ggplot(MeansOilPhoto, aes(y=DeadStemDryWgt_g, x=Total.Aromatics)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4) + theme_boxplot() +
                geom_smooth() +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -270,7 +251,7 @@ DdStmAr
 ###############
 # Insect abundance 
 ProkAk <- ggplot(MeansOilPhoto, aes(y=Prok_Abun, x=Total.Alkanes)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4, aes(colour=Chem)) + theme_boxplot() +
                geom_smooth(se=FALSE) +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -280,7 +261,7 @@ ProkAk <- ggplot(MeansOilPhoto, aes(y=Prok_Abun, x=Total.Alkanes)) +
 ProkAk
 #
 ProkAr <- ggplot(MeansOilPhoto, aes(y=Prok_Abun, x=Total.Aromatics)) +
-               geom_point(shape=5, size=4) + theme_boxplot() +
+               geom_point(shape=15, size=4, aes(colour=Chem)) + theme_boxplot() +
                geom_smooth(se=FALSE) +
                theme(legend.key=element_blank(), legend.background=element_blank(),
                      legend.text=element_text(size=18), legend.position=c(.95, .85),
@@ -291,8 +272,10 @@ ProkAr
 
 ##############
 # Snail Weight change
+colors <- c("green","red","yellow","orange")
+
 LitAk <- ggplot(MeansOilPhoto, aes(y=SnailWgt_per_Day, x=Total.Alkanes)) +
-                geom_point(shape=5, size=4) + theme_boxplot() +
+                geom_point(shape=15, size=4, aes(colour=Chem)) + theme_boxplot() +
                 geom_smooth(se=FALSE) +
                 theme(legend.key=element_blank(), legend.background=element_blank(),
                       legend.text=element_text(size=18), legend.position=c(.95, .85),

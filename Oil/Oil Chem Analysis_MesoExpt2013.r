@@ -4,9 +4,11 @@
 ###  script by Rachael E. Blake  June 2013     ###
 ##################################################
 
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Oiling Stuff")
+library(ggplot2) ; library(plyr) ; library(dplyr) ; library(grid) ; library(scales) ;
+library(reshape2) ; library(Rmisc)
 
-OS <- read.csv("2014021_Sediment Samples_FINAL.csv")
+
+OS <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Oiling Stuff/2014021_Sediment Samples_FINAL.csv")
 head(OS)
 tail(OS)
 names(OS)
@@ -44,9 +46,7 @@ OilCore <- OS[OS$Chem %in% "OilCore",]
 head(OilCore) ; tail(OilCore)
 
 # Plots
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
 
-# some basic plots
 OS$Chem1 <- factor(OS$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 qplot(x=Chem1, y=TtlAlkanes, fill=Herbivore, data=OS, geom="boxplot")
       qplot(x=Chem1, y=TtlAlkanes, data=May20, geom="boxplot")
@@ -54,6 +54,7 @@ qplot(x=Chem1, y=TtlAlkanes, fill=Herbivore, data=OS, geom="boxplot")
       qplot(x=Chem1, y=TtlAlkanes, data=June12, geom="boxplot")
       qplot(x=Chem1, y=TtlAlkanes, data=June20, geom="boxplot")
       qplot(x=Chem1, y=TtlAlkanes, data=July5, geom="boxplot")
+      
 qplot(x=Date, y=TtlAlkanes, fill=Chem1, data=OS, geom="boxplot")
       qplot(x=Date, y=TtlAlkanes, data=NC, geom="boxplot")
       qplot(x=Date, y=TtlAlkanes, data=Core, geom="boxplot")
@@ -67,6 +68,7 @@ qplot(x=Chem1, y=TtlAromatics, fill=Herbivore, data=OS, geom="boxplot")
       qplot(x=Chem1, y=TtlAromatics, data=June12, geom="boxplot")
       qplot(x=Chem1, y=TtlAromatics, data=June20, geom="boxplot")
       qplot(x=Chem1, y=TtlAromatics, data=July5, geom="boxplot")
+      
 qplot(x=Date, y=TtlAromatics, fill=Chem1, data=OS, geom="boxplot")
       qplot(x=Date, y=TtlAromatics, data=NC, geom="boxplot")
       qplot(x=Date, y=TtlAromatics, data=Core, geom="boxplot")
@@ -87,14 +89,17 @@ theme_boxplot <- function(base_size = 12){
          panel.border=element_rect(colour='black', fill = NA),
          panel.margin=unit(0,"lines"),
          axis.ticks.length=unit(1,"mm"),
-         axis.ticks.margin = unit(0, "lines"),
+         axis.text.x = element_text(margin=margin(0,0,0,0, "lines")),
+         axis.text.y = element_text(margin=margin(0,0,0,0,"lines")),
          axis.text=element_text(size=12),
          axis.title.x=element_text(hjust=.55, vjust=-.01, size=17),
          axis.title.y=element_text(size=17, angle=90, hjust=.56, vjust=-.001),
          panel.grid.major=element_blank(),
          panel.grid.minor=element_blank(),
          strip.text.x=element_text(size=14),
-         strip.background=element_rect(colour='black', fill='white'))
+         strip.background=element_rect(colour='black', fill='white'),
+         axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+         axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
 }  
 ##########################################
 
@@ -104,7 +109,7 @@ CoreMay20 <- Core[Core$Date %in% "20-May-2013",] ; CoreMay20
 OilMay20 <- Oil[Oil$Date %in% "20-May-2013",] ; OilMay20
 NCMay20 <- NC[NC$Date %in% "20-May-2013",] ; NCMay20
 
-library(reshape2)
+
 
 melt1 <- melt(OilCoreMay20, id=c('Date','Bucket','Treat','Chem','Oil','Corexit',
                                   'Herbivore','TtlAlkanes','TtlAromatics','Date1'),
@@ -159,57 +164,9 @@ NCp <- ggplot(data=NCmelt, aes(x=variable,y=mvalue)) + geom_bar(width=0.5,stat="
 NCp
 
 #####
-multiplot(NCp, Cp, Op, OCp, cols=2)
+multiplot(NCp, Cp, Op, OCp, cols=2)  # in Rmisc package
 
-########################################################################################
-# Multiple plot function - from Winston Chang
-#
-# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
-# - cols:   Number of columns in layout
-# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
-#
-# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
-# then plot 1 will go in the upper left, 2 will go in the upper right, and
-# 3 will go all the way across the bottom.
-#
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
-
-  # Make a list from the ... arguments and plotlist
-  plots <- c(list(...), plotlist)
-
-  numPlots = length(plots)
-
-  # If layout is NULL, then use 'cols' to determine layout
-  if (is.null(layout)) {
-    # Make the panel
-    # ncol: Number of columns of plots
-    # nrow: Number of rows needed, calculated from # of cols
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                    ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-
- if (numPlots==1) {
-    print(plots[[1]])
-
-  } else {
-    # Set up the page
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-
-    # Make each plot, in the correct location
-    for (i in 1:numPlots) {
-      # Get the i,j matrix positions of the regions that contain this subplot
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
-}
-
-##############################################################################
-
+########################################################################
 
 ################### MAY 29TH ##############################
 OilCoreMay29 <- OilCore[OilCore$Date %in% "29-May-2013",] ; OilCoreMay29
@@ -217,7 +174,6 @@ CoreMay29 <- Core[Core$Date %in% "29-May-2013",] ; CoreMay29
 OilMay29 <- Oil[Oil$Date %in% "29-May-2013",] ; OilMay29
 NCMay29 <- NC[NC$Date %in% "29-May-2013",] ; NCMay29
 
-library(reshape2)
 
 melt11 <- melt(OilCoreMay29, id=c('Date','Bucket','Treat','Chem','Oil','Corexit',
                                   'Herbivore','TtlAlkanes','TtlAromatics','Date1'),
