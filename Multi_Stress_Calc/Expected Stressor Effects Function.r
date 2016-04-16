@@ -4,37 +4,59 @@
 ### Rachael E. Blake    March 2014            ###
 #################################################
 
-# Need to write a function for choosing and applying the correct "expected" equation.
+library(tidyr) ; library(plyr) ; library(dplyr)
 
-# Expected Stressor Effects Function Code:
-       
-# In this case, might be useful to attach and detach the dataset, so that I don't have to go in and
-# re-type all those dataset names each time.
+# All data
+AllD <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
+AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
+
+# LIVE2 <- AllD %>%
+#          select(Bucket, Chem, LiveStemDryWgt_g) %>%
+#          spread(key=Chem, value=LiveStemDryWgt_g) %>%
+#          select(-Bucket) %>%
+#          filter(!is.na(Core),
+#                 !is.na(NC),
+#                 !is.na(Oil),
+#                 !is.na(OilCore))
+
+
+# Live Stem Biomass
+LIVE <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_LiveBmss_MesoExpt2013.csv")
+boxplot(LIVE)
+ggplot(AllD, aes(x=Chem1, y=LiveStemDryWgt_g)) + stat_summary(fun.y="mean", geom="bar")
+
+# Dead Stem Biomass
+DEAD <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_DeadBmss_MesoExpt2013.csv")
+boxplot(DEAD)
+ggplot(AllD, aes(x=Chem1, y=DeadStemDryWgt_g)) + stat_summary(fun.y="mean", geom="bar")
+DEADmn <- 
+
+# Stem Number
+NUM <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_StemNum_MesoExpt2013.csv")
+boxplot(NUM)
+ggplot(AllD, aes(x=Chem1, y=TtlStemNum)) + stat_summary(fun.y="mean", geom="bar")
+
+# Prokelisia
+PROK <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_Insects_MesoExpt2013.csv")
+boxplot(PROK)
+ggplot(AllD, aes(x=Chem1, y=ProkAbunScaled)) + stat_summary(fun.y="mean", geom="bar")
+
+# Snails
+SNAL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_Snails_MesoExpt2013.csv")
+boxplot(SNAL)
+ggplot(AllD, aes(x=Chem1, y=SnailWgtScaled)) + stat_summary(fun.y="mean", geom="bar")
+
+# make a list of the data frames
+expstrlist <- list(DEAD, LIVE, NUM, PROK, SNAL)
 
 ###################################################
+# Expected Stressor Effects Function Code: (Additive)
 
-
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\")
-
-LIVE <- read.csv("Exp Stress_LiveBmss_MesoExpt2013.csv")
-names(LIVE)
-
-DEAD <- read.csv("Exp Stress_DeadBmss_MesoExpt2013.csv")
-names(DEAD)
-
-NUM <- read.csv("Exp Stress_StemNum_MesoExpt2013.csv")
-names(NUM)
-
-
-###################################################
-
-attach(LIVE)
-
-ExpectedStressFunction <- function(equation) {
-       if(equation==1){ExpSt <- control+(oil-control)+(corexit-control)} else     #positive
-       if (equation==2){ExpSt <- control-(control-oil)-(control-corexit)} else    #negative
-       if (equation==3){ExpSt <- control+(oil-control)-(control-corexit)} else    #oil>control
-       if (equation==4){ExpSt <- control+(corexit-control)-(control-oil)}         #oil<control
+ExpectedStress <- function(dafr) {
+       if (dafr$control<dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)+(dafr$corexit-dafr$control)} else     #positive
+       if (dafr$control>dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control-(dafr$control-dafr$oil)-(dafr$control-dafr$corexit)} else    #negative
+       if (dafr$control>dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)-(dafr$control-dafr$corexit)} else    #oil>control
+       if (dafr$control<dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control+(dafr$corexit-dafr$control)-(dafr$control-dafr$oil)}         #oil<control
        return (ExpSt)
        }
 
@@ -44,14 +66,8 @@ ExpectedStressFunction <- function(equation) {
 #    3 = mixed1 (oil>control)
 #    4 = mixed2 (oil<control)      
        
-equation <- 1                                                              
-ExpectedStressFunction(equation)
-
-#This is for use on my laptop:
-write.table(ExpectedStressFunction(equation),"C:/Users/reblake/Desktop/ExpSt_Zost-Elas.csv", sep=",") 
-
-
-detach(LIVE)
+ExpectedStress(LIVE)
 
 ####################################################
 
+# use lapply to run my fuction for each of the datasets
