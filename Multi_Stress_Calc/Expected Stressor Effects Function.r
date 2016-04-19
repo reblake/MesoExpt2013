@@ -52,6 +52,7 @@ SNALmn <- summarise_each(SNAL, funs(mean(., na.rm=TRUE)))
 
 # make a list of the data frames
 expstrlist <- list(LIVEmn, DEADmn, NUMmn, PROKmn, SNALmn)
+names(expstrlist) <- c("LIVEmn","DEADmn","NUMmn","PROKmn","SNALmn")
 
 ###################################################
 # Expected Stressor Effects Function Code: (Additive)
@@ -70,13 +71,13 @@ ExpectedStress <- function(dafr) {
 #    3 = mixed1 (oil>control)
 #    4 = mixed2 (oil<control)      
        
-ExpectedStress(LIVEmn)
+#ExpectedStress(LIVEmn)
 
 ####################################################
 
 # use lapply to run my fuction for each of the datasets
 
-
+ExpStrsCalc <- lapply(expstrlist, function(i){ExpectedStress(i)})
 
 
 
