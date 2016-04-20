@@ -15,11 +15,10 @@ AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Oil', 'Core', 'OilCore'))
 # function to subset the data by full treatment
 treatment_subset <- function(Herb_level, resp_var) {
                     sub_df <- AllD %>%
-                             # filter_(.dots = list(~Chem == Chem_level)) %>%
                               filter_(.dots = list(~Herbivore == Herb_level)) %>%
                               select_("Chem", resp_var) %>%
-                             # spread_(key="Chem", value=resp_var)
-                              dcast( ~ "Chem", value.var=resp_var)
+                              spread_(key="Chem", value=resp_var)
+                             # dcast( ~ "Chem", value.var=resp_var)
 }
 
 
