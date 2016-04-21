@@ -16,44 +16,65 @@ AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Oil', 'Core', 'OilCore'))
 treatment_subset <- function(Herb_level, resp_var) {
                     sub_df <- AllD %>%
                               filter_(.dots = list(~Herbivore == Herb_level)) %>%
-                              select_("Chem", resp_var) %>%
+                              select_("Bucket", "Chem", resp_var) %>%
                               spread_(key="Chem", value=resp_var)
-                             # dcast( ~ "Chem", value.var=resp_var)
+                    
+                    sub_2 <- sub_df %>%
+                             select(-Bucket) %>%
+                             summarise_each(funs(mean(., na.rm = TRUE))) %>%
+                             rename(corexit=Core, control=NC, oil=Oil, oilcore=OilCore)
+                    
+                    return(sub_2)
 }
 
 
-
-
-dcast(name ~ numbers)
-
 # Live Stem Biomass
-LIVE <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_LiveBmss_MesoExpt2013.csv")
-boxplot(LIVE)
-LIVEmn <- summarise_each(LIVE, funs(mean))
+LIVE_NG <- treatment_subset("NG", "LiveStemDryWgt_g")
+LIVE_S <- treatment_subset("S", "LiveStemDryWgt_g")
+LIVE_P <- treatment_subset("P", "LiveStemDryWgt_g")
+LIVE_SP <- treatment_subset("SP", "LiveStemDryWgt_g")
 
 # Dead Stem Biomass
-DEAD <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_DeadBmss_MesoExpt2013.csv")
-boxplot(DEAD)
-DEADmn <- summarise_each(DEAD, funs(mean))
-
+DEAD_NG <- treatment_subset("NG", "DeadStemDryWgt_g")
+DEAD_S <- treatment_subset("S", "DeadStemDryWgt_g")
+DEAD_P <- treatment_subset("P", "DeadStemDryWgt_g")   
+DEAD_SP <- treatment_subset("SP", "DeadStemDryWgt_g")
+  
 # Stem Number
-NUM <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_StemNum_MesoExpt2013.csv")
-boxplot(NUM)
-NUMmn <- summarise_each(NUM, funs(mean))
+NUM_NG <- treatment_subset("NG", "TtlStemNum")
+NUM_P <- treatment_subset("P", "TtlStemNum")
+NUM_S <- treatment_subset("S", "TtlStemNum")
+NUM_SP <- treatment_subset("SP", "TtlStemNum")
+
+# Live Root Biomass
+LIVR_NG <- treatment_subset("NG", "LvRootDryWgt_Scaled")
+LIVR_S <- treatment_subset("S", "LvRootDryWgt_Scaled")
+LIVR_P <- treatment_subset("P", "LvRootDryWgt_Scaled")
+LIVR_SP <- treatment_subset("SP", "LvRootDryWgt_Scaled")
+
+# Dead Root Biomass
+DEDR_NG <- treatment_subset("NG", "DdRootDryWgt")
+DEDR_S <- treatment_subset("S", "DdRootDryWgt")
+DEDR_P <- treatment_subset("P", "DdRootDryWgt")
+DEDR_SP <- treatment_subset("SP", "DdRootDryWgt")
 
 # Prokelisia
-PROK <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_Insects_MesoExpt2013.csv")
-boxplot(PROK)
-PROKmn <- summarise_each(PROK, funs(mean(., na.rm=TRUE)))
+PROK_P <- treatment_subset("P", "ProkAbunScaled")
+PROK_SP <- treatment_subset("SP", "ProkAbunScaled")
 
 # Snails
-SNAL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Exp_Stress_Snails_MesoExpt2013.csv")
-boxplot(SNAL)
-SNALmn <- summarise_each(SNAL, funs(mean(., na.rm=TRUE)))
+SNAL_S <- treatment_subset("S", "SnailWgtScaled")
+SNAL_SP <- treatment_subset("SP", "SnailWgtScaled")
+
 
 # make a list of the data frames
-expstrlist <- list(LIVEmn, DEADmn, NUMmn, PROKmn, SNALmn)
-names(expstrlist) <- c("LIVEmn","DEADmn","NUMmn","PROKmn","SNALmn")
+expstrlist <- list(LIVE_NG, LIVE_S, LIVE_P, LIVE_SP, DEAD_NG, DEAD_S, DEAD_P, DEAD_SP,
+                   NUM_NG, NUM_P, NUM_S, NUM_SP, LIVR_NG, LIVR_S, LIVR_P, LIVR_SP, 
+                   DEDR_NG, DEDR_S, DEDR_P, DEDR_SP, PROK_P, PROK_SP, SNAL_S, SNAL_SP)
+names(expstrlist) <- c("LIVE_NG", "LIVE_S", "LIVE_P", "LIVE_SP", "DEAD_NG", "DEAD_S", 
+                       "DEAD_P", "DEAD_SP", "NUM_NG", "NUM_P", "NUM_S", "NUM_SP",
+                       "LIVR_NG", "LIVR_S", "LIVR_P", "LIVR_SP", "DEDR_NG", "DEDR_S",
+                       "DEDR_P", "DEDR_SP","PROK_P", "PROK_SP", "SNAL_S", "SNAL_SP")
 
 ###################################################
 # Expected Stressor Effects Function Code: (Additive)
