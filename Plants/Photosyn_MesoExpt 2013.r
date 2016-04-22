@@ -8,9 +8,6 @@
 library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scales)
 library(car) 
 
-# Set working directory
-#setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR_Files_Meso_Expt\\")
-
 # Read in data file of all photosynthesis data
 PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
 names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)

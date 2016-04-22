@@ -33,7 +33,7 @@ theme_boxplot <- function(base_size = 12){
 ##########################################
 
 #############################
-# Expected Multi-Stress 
+# Expected Multi-Stress with biomass and abundances of stems and herbivores
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r")
  
 ExpStrsCalc  # this displays the expected stressor effects
@@ -147,6 +147,10 @@ S
 grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
 ##############################
+
+
+
+
 
 
 
