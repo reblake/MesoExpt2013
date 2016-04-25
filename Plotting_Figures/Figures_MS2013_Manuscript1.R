@@ -3,7 +3,7 @@
 ### Script by Rachael Blake, April 2016                           ###
 #####################################################################
 
-library(ggplot2) ; library(scales) ; library(gridExtra)
+library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr)
 
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
@@ -50,8 +50,8 @@ L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1, color="black"
             geom_segment(aes(x = 2.5, y = 48.94692, xend = 3.5, yend = 48.94692), size=1.5) +
             geom_segment(aes(x = 3.5, y = 38.0773, xend = 4.5, yend = 38.0773), size=1.5) +
          #   geom_hline(yintercept = 45.52354, color = "black") + 
-            theme_boxplot() + xlab("") + labs(title= "a") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") + ylab("Live Shoots (g dry weight)") +
+            scale_fill_manual(values=barcolor) + labs(title= "a") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -65,8 +65,8 @@ D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1, color="black"
             geom_segment(aes(x = 1.5, y = 3.4922, xend = 2.5, yend = 3.4922), size=1.5) +
             geom_segment(aes(x = 2.5, y = 1.469, xend = 3.5, yend = 1.469), size=1.5) +
             geom_segment(aes(x = 3.5, y = 2.2563, xend = 4.5, yend = 2.2563), size=1.5) +
-            theme_boxplot() + xlab("") + labs(title= "b") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") + ylab("Dead Shoots (g dry weight)") +
+            scale_fill_manual(values=barcolor) + #labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -80,8 +80,8 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) +
             geom_segment(aes(x = 1.5, y = 17, xend = 2.5, yend = 17), size=1.5) +
             geom_segment(aes(x = 2.5, y = 13.66667, xend = 3.5, yend = 13.66667), size=1.5) +
             geom_segment(aes(x = 3.5, y = 16.66667, xend = 4.5, yend = 16.66667), size=1.5) +
-            theme_boxplot() + xlab("") + labs(title= "c") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") + ylab("Number of Shoots") +
+            scale_fill_manual(values=barcolor) + labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -95,8 +95,8 @@ LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1, color="bl
             geom_segment(aes(x = 1.5, y = 2.557233, xend = 2.5, yend = 2.557233), size=1.5) +
             geom_segment(aes(x = 2.5, y = 3.010425, xend = 3.5, yend = 3.010425), size=1.5) +
             geom_segment(aes(x = 3.5, y = 2.58818, xend = 4.5, yend = 2.58818), size=1.5) +
-            theme_boxplot() + xlab("") + labs(title= "d") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") +  ylab("Live Roots (g dry weight)") +
+            scale_fill_manual(values=barcolor) + labs(title= "c") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -110,8 +110,8 @@ DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1, color="black")) 
             geom_segment(aes(x = 1.5, y = 1.6038, xend = 2.5, yend = 1.6038), size=1.5) +
             geom_segment(aes(x = 2.5, y = 2.04885, xend = 3.5, yend = 2.04885), size=1.5) +
             geom_segment(aes(x = 3.5, y = 1.332867, xend = 4.5, yend = 1.332867), size=1.5) +
-            theme_boxplot() + xlab("") + labs(title= "e") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") +  
+            scale_fill_manual(values=barcolor) + #labs(title= "e") +
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -123,8 +123,8 @@ P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black"))
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
-            theme_boxplot() + xlab("") + labs(title= "f") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") + ylab("Number of Insects") +
+            scale_fill_manual(values=barcolor) + labs(title= "d") +
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
@@ -136,8 +136,8 @@ S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1, color="black"))
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
             geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
-            theme_boxplot() + xlab("") + labs(title= "g") + 
-            scale_fill_manual(values=barcolor) +
+            theme_boxplot() + xlab("") + ylab("Change in Snail Mass (g)") +
+            scale_fill_manual(values=barcolor) + labs(title= "e") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
