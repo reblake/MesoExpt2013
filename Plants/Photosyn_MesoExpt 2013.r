@@ -103,6 +103,7 @@ FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)
 PMean_L_sub <- PMean_L %>% 
                filter(Date != "20-May") %>%
                select(Date, MeasType, Treatment, Chem, Herbivore, Photo, qN, qP, Week, Chem1, Week1)
+
 # and then still include all treatment combos so the plotting comes out correctly
 table(PMean_L_sub$Herbivore, PMean_L_sub$Chem1, PMean_L_sub$Week1)
 
@@ -117,6 +118,7 @@ PMean_L_sub2 <- full_join(complete, PMean_L_sub, by=c("Chem1", "Herbivore", "Wee
 
 table(PMean_L_sub2$Herbivore, PMean_L_sub2$Chem1, PMean_L_sub2$Week1)
 
+levels(PMean_L_sub2$Week1) <- paste0(" \n", levels(PMean_L_sub2$Week1) , "\n ")
 
 # Photosynthesis
 PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
