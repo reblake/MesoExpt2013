@@ -26,6 +26,7 @@ theme_boxplot <- function(base_size = 12){
           panel.grid.major=element_blank(),
           panel.grid.minor=element_blank(),
           strip.text.x=element_text(size=14),
+          strip.text.x=element_text(size=14, angle=90),
           strip.background=element_rect(colour='black', fill='white'),
           axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
@@ -147,6 +148,21 @@ S
 grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
 ##############################
+# Plant Physiology
+source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
+head(PMean)
+head(PMean_L_sub2)
+
+barcolor <- c("white", "grey70", "grey40", "black")
+
+# Fv/Fm
+FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
+                   geom_boxplot() + theme_boxplot() + facet_wrap(~ Week1) +
+                   theme(legend.position=c(.93, .1),
+                         panel.border = element_rect(colour = "black", fill=NA)) +
+                   scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL))
+FvFmPlot
+
 
 
 

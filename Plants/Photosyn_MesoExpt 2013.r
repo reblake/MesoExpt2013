@@ -6,7 +6,7 @@
 
 # Load libraries
 library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scales)
-library(car) 
+library(car) ; library(gridExtra) 
 
 # Read in data file of all photosynthesis data
 PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
@@ -23,58 +23,157 @@ names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 PMean <- PhotoALL %>%
          group_by(Date,MeasType,Bucket.Number,Treatment,Chem,Oil,Corexit,Herbivore) %>%
          summarise_each(funs(mean),-HHMMSS) %>%
-         ungroup()
+         ungroup() %>% 
+         mutate(Week = ifelse((Date %in% c("20-May","21-May","23-May","24-May")),'Initial (Week 1)',
+                       ifelse((Date %in% c("27-May","28-May","30-May","31-May")),'Week 2',
+                       ifelse((Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun")),'Week 3',
+                       ifelse((Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul")),'Final (Week 8)',""))))
+                )
          
-  
+# for ordering the plots
+PMean$Chem1 <- factor(PMean$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
+PMean$Week1 <- factor(PMean$Week, levels=c('Initial (Week 1)', 'Week 2', 'Week 3', 'Final (Week 8)'))
+
+
 #write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
 
 #############################################################
 # Subsetting the data
 
+PMean_L <- PMean %>%
+           filter(MeasType=="Light")
+
+
 InitialLight <- PMean %>%
                 filter(MeasType=="Light",
-                       Date %in% c("20-May","21-May","23-May","24-May"))
+                       Week == "Initial (Week 1)")
 
 InitialDark <- PMean %>%
                filter(MeasType=="Dark",
-                      Date %in% c("20-May","21-May","23-May","24-May"))
+                      Week == "Initial (Week 1)")
 
 Wk2Light <- PMean %>%
             filter(MeasType=="Light",
-                   Date %in% c("27-May","28-May","30-May","31-May"))
+                   Week == "Week 2")
 
 Wk2Dark <- PMean %>%
            filter(MeasType=="Dark",
-                  Date %in% c("27-May","28-May","30-May","31-May")) 
+                  Week == "Week 2") 
 
 Wk3Light <- PMean %>%
             filter(MeasType=="Light",
-                   Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"))
+                   Week == "Week 3")
 
 Wk3Dark <- PMean %>%
            filter(MeasType=="Dark",
-                  Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun"))
+                  Week == "Week 3")
   
 FinalLight <- PMean %>%
               filter(MeasType=="Light",
-                     Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"))
+                     Week == "Final (Week 8)")
 
 FinalDark <- PMean %>%
              filter(MeasType=="Dark",
-                    Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul"))
+                    Week == "Final (Week 8)")
 
 ###############################################################
+# Plotting one response variable through time
+colors <- c("green","red","yellow","orange")
 
-# Just looking at the data
-qplot(y=PhiPS2, x=Fv..Fm., data=PMean)
-qplot(y=PhiPS2, x=PhiCO2, data=PMean)
+# Fv/Fm
+FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
+                    geom_boxplot() + theme_bw() + facet_wrap(~ Week1) +
+                    theme(strip.text.x=element_text(size=14),
+                          strip.text.x=element_text(size=14, angle=90),
+                          strip.background=element_rect(fill="white"),
+                          panel.grid=element_blank(),legend.key=element_blank(),
+                          legend.background=element_blank(),legend.text=element_text(size=12),
+                          legend.position=c(.93, .1),axis.text=element_text(size=18),
+                          panel.border=element_blank(),axis.line=element_line(color='black'),
+                          panel.background=element_blank(),plot.background=element_blank(),
+                          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                     scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
+
+
+
+
+# NOTE: Have to remove May 20th data...it's weird from some reason
+PMean_L_sub <- PMean_L %>% 
+               filter(Date != "20-May") %>%
+               select(Date, MeasType, Treatment, Chem, Herbivore, Photo, qN, qP, Week, Chem1, Week1)
+# and then still include all treatment combos so the plotting comes out correctly
+table(PMean_L_sub$Herbivore, PMean_L_sub$Chem1, PMean_L_sub$Week1)
+
+complete <- expand.grid(Chem1 = unique(PMean_L_sub$Chem1),
+                        Herbivore = unique(PMean_L_sub$Herbivore),
+                        Week1 = unique(PMean_L_sub$Week1)) 
+
+PMean_L_sub2 <- full_join(complete, PMean_L_sub, by=c("Chem1", "Herbivore", "Week1")) %>%
+                mutate(Photo = ifelse(is.na(Photo), -10, Photo),
+                       qN = ifelse(is.na(qN), -10, qN),
+                       qP = ifelse(is.na(qP), -10, qP))
+
+table(PMean_L_sub2$Herbivore, PMean_L_sub2$Chem1, PMean_L_sub2$Week1)
+
+
+# Photosynthesis
+PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
+                    geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ Week1, ncol=2) +
+                    coord_cartesian(ylim = c(0, 30) + c(-.25, .25)) +
+                    theme(strip.text.x=element_text(size=14),
+                          strip.text.x=element_text(size=14, angle=90),
+                          strip.background=element_rect(fill="white"),
+                          panel.grid=element_blank(),legend.key=element_blank(),
+                          legend.background=element_blank(),legend.text=element_text(size=12),
+                          legend.position=c(.9, .4),axis.text=element_text(size=18),
+                          panel.border=element_blank(),axis.line=element_line(color='black'),
+                          panel.background=element_blank(),plot.background=element_blank(),
+                          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                     scale_fill_manual(values=colors, labels = c("NC","Core","Oil","OilCore"),
+                                       guide=guide_legend(title = NULL), drop=FALSE) 
+
+
+
+ 
+# qN 
+qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ Week1, ncol=2) +
+                 coord_cartesian(ylim = c(1.5, 3.5) + c(-.25, .25)) +
+                 theme(strip.text.x=element_text(size=14),
+                       strip.text.x=element_text(size=14, angle=90),
+                       strip.background=element_rect(fill="white"),
+                       panel.grid=element_blank(),legend.key=element_blank(),
+                       legend.background=element_blank(),legend.text=element_text(size=12),
+                       legend.position=c(.1, .9),axis.text=element_text(size=18),
+                       panel.border=element_blank(),axis.line=element_line(color='black'),
+                       panel.background=element_blank(),plot.background=element_blank(),
+                       axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                       axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                 scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
+
+
+
+# qP
+qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~Week1, ncol=2) +
+                 coord_cartesian(ylim = c(0.25, 0.75) + c(-.25, .25)) +
+                 theme(strip.text.x=element_text(size=14),
+                       strip.text.x=element_text(size=14, angle=90),
+                       strip.background=element_rect(fill="white"),
+                       panel.grid=element_blank(),legend.key=element_blank(),
+                       legend.background=element_blank(),legend.text=element_text(size=12),
+                       legend.position=c(.1, .9),axis.text=element_text(size=18),
+                       panel.border=element_blank(),axis.line=element_line(color='black'),
+                       panel.background=element_blank(),plot.background=element_blank(),
+                       axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                       axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                 scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
+
 
 
 ###### FINAL DATA (END OF EXPERIMENT) #########################
-
-# Looking at data
-qplot(x=FinalLight$Fv..Fm.,y=FinalLight$PhiPS2)
-
 
 ## Plotting the final data
 colors <- c("green","red","yellow","orange")
@@ -160,10 +259,7 @@ Anova(FnlDarkA, type="III") # calculates ANOVA table with Type III SS
 
 
 ###### INITIAL DATA (WEEK 1 OF EXPERIMENT) #########################
-
-
-# Looking at data
-qplot(x=InitialLight$Fv..Fm.,y=InitialLight$PhiPS2)
+# Should remove all May 20th data - it's whacky for some reason
 
 
 ## Plotting the initial data
@@ -236,9 +332,6 @@ Anova(InitDarkA, type="III") # calculates ANOVA table with Type III SS
 
 
 ###### DATA FROM WEEK 2 OF EXPERIMENT #########################
-
-# Looking at data
-qplot(x=Wk2Light$Fv..Fm.,y=Wk2Light$PhiPS2)
 
 
 ## Plotting the Week 2 data
@@ -320,12 +413,7 @@ Anova(Wk2DarkA, type="III") # calculates ANOVA table with Type III SS
 
 ###### DATA FROM WEEK 3 OF EXPERIMENT #########################
 
-# Looking at data
-qplot(x=Wk3Light$Fv..Fm.,y=Wk3Light$PhiPS2)
-
-
 ## Plotting the Week 3 data
-#library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
 #
 colors <- c("green","red","yellow","orange")
 Wk3Light$Chem1 <- factor(Wk3Light$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
@@ -389,13 +477,24 @@ Anova(Wk3LightAqN, type="III") # calculates ANOVA table with Type III SS
 Wk3LightAPhi <- lm(as.numeric(PhiPS2) ~ Oil*Corexit*Herbivore, data=Wk3Light)
 Anova(Wk3LightAPhi, type="III") # calculates ANOVA table with Type III SS
 
-# Week 2 Fv/Fm (Dark) ANOVA
+# Week 3 Fv/Fm (Dark) ANOVA
 # ANOVA TYPE III SS
 options(contrasts=c("contr.sum","contr.poly"))
 #options(contrasts=c("contr.treatment","contr.poly"))
 
 Wk3DarkA <- lm(as.numeric(Fv.Fm) ~ Oil*Corexit*Herbivore, data=Wk3Dark)
 Anova(Wk3DarkA, type="III") # calculates ANOVA table with Type III SS
+
+
+
+
+##############
+grid.arrange(DarkPlot2, DarkPlot3, DarkPlot4, ncol=2, nrow=2)
+
+
+###############
+
+
 
 
 #########################################
