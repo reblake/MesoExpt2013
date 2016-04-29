@@ -10,7 +10,7 @@ library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; libr
 theme_boxplot <- function(base_size = 12){
   theme_bw(base_size) %+replace%
     theme(legend.key.size=unit(15,"points"),
-          legend.text=element_text(size=I(13)),
+          legend.text=element_text(size=I(11)),
           legend.key=element_blank(),
           legend.title=element_blank(),
           legend.position="none",
@@ -21,12 +21,12 @@ theme_boxplot <- function(base_size = 12){
           axis.text.x = element_text(margin=margin(5,0,0,0)),
           axis.text.y = element_text(margin=margin(0,5,0,0)),
           axis.text=element_text(size=13),
-          axis.title.x=element_text(size=17, margin=margin(15,0,0,0)), 
+          axis.title.x=element_text(size=15, margin=margin(15,0,0,0)), 
           axis.title.y=element_text(size=15, angle=90, margin=margin(0,15,0,0)), 
           panel.grid.major=element_blank(),
           panel.grid.minor=element_blank(),
-          strip.text.x=element_text(size=14),
-          strip.text.x=element_text(size=14, angle=90),
+          strip.text.x=element_text(size=13, lineheight=0.5),
+          strip.text.y=element_text(size=13),
           strip.background=element_rect(colour='black', fill='white'),
           axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
@@ -43,8 +43,8 @@ barcolor <- c("white", "grey70", "grey40", "black")
 baroutline <- c("black","black","black","black")
 dodge <- position_dodge(width=0.9)
 
-L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 31.60692, xend = 1.5, yend = 31.60692), size=1.5) +
             geom_segment(aes(x = 1.5, y = 63.46302, xend = 2.5, yend = 63.46302), size=1.5) +
@@ -59,8 +59,8 @@ L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1, color="black"
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 L   
 
-D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 2.1167, xend = 1.5, yend = 2.1167), size=1.5) +
             geom_segment(aes(x = 1.5, y = 3.4922, xend = 2.5, yend = 3.4922), size=1.5) +
@@ -74,8 +74,8 @@ D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1, color="black"
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 D
 
-N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 17, xend = 1.5, yend = 17), size=1.5) +
             geom_segment(aes(x = 1.5, y = 17, xend = 2.5, yend = 17), size=1.5) +
@@ -89,8 +89,8 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) +
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 N
 
-LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 2.553967, xend = 1.5, yend = 2.553967), size=1.5) +
             geom_segment(aes(x = 1.5, y = 2.557233, xend = 2.5, yend = 2.557233), size=1.5) +
@@ -104,8 +104,8 @@ LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1, color="bl
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 LR
 
-DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 0.1316667, xend = 1.5, yend = 0.1316667), size=1.5) +
             geom_segment(aes(x = 1.5, y = 1.6038, xend = 2.5, yend = 1.6038), size=1.5) +
@@ -119,21 +119,24 @@ DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1, color="black")) 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 DR
 
-P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
-            theme_boxplot() + xlab("") + ylab("Number of Insects") +
-            scale_fill_manual(values=barcolor) + labs(title= "d") +
-            scale_colour_manual(values=baroutline) + 
+            theme_boxplot() + xlab("") + ylab("Number of Insects") + labs(title= "d") +
+            scale_fill_manual(values=barcolor, breaks=c("NC","Oil","Core","OilCore"),
+                              labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) + 
+            scale_colour_manual(values=baroutline, breaks=c("NC","Oil","Core","OilCore"),
+                              labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  legend.position=c(.2, .8))
 P
 
-S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1)) + 
+            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
             geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
@@ -153,14 +156,17 @@ source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_Meso
 head(PMean)
 head(PMean_L_sub2)
 
-barcolor <- c("white", "grey70", "grey40", "black")
-
 # Fv/Fm
 FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
                    geom_boxplot() + theme_boxplot() + facet_wrap(~ Week1) +
+                   xlab("Herbivore Treatment") + ylab("Fv/Fm") + 
                    theme(legend.position=c(.93, .1),
                          panel.border = element_rect(colour = "black", fill=NA)) +
-                   scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL))
+                   scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                                   breaks=c("NC","Oil","Core","OilCore"),
+                                   labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) +
+                   scale_x_discrete(breaks=c("NG","P","S","SP"),
+                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 FvFmPlot
 
 

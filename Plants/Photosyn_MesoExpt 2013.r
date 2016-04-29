@@ -33,6 +33,7 @@ PMean <- PhotoALL %>%
 # for ordering the plots
 PMean$Chem1 <- factor(PMean$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 PMean$Week1 <- factor(PMean$Week, levels=c('Initial (Week 1)', 'Week 2', 'Week 3', 'Final (Week 8)'))
+levels(PMean$Week1) <- paste0(" \n", levels(PMean$Week1) , "\n ")
 
 
 #write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
