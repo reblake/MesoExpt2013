@@ -157,8 +157,8 @@ head(PMean)
 head(PMean_L_sub2)
 
 # Fv/Fm
-FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
-                   geom_boxplot() + theme_boxplot() + facet_wrap(~ Week1) +
+FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) + 
+                   geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
                    xlab("Herbivore Treatment") + ylab("Fv/Fm") + 
                    theme(legend.position=c(.9, .1),
                          panel.border = element_rect(colour = "black", fill=NA)) +

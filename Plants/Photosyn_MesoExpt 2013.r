@@ -119,7 +119,7 @@ PMean_L_sub2 <- full_join(complete, PMean_L_sub, by=c("Chem1", "Herbivore", "Wee
 
 table(PMean_L_sub2$Herbivore, PMean_L_sub2$Chem1, PMean_L_sub2$Week1)
 
-levels(PMean_L_sub2$Week1) <- paste0(" \n", levels(PMean_L_sub2$Week1) , "\n ")
+#levels(PMean_L_sub2$Week1) <- paste0(" \n", levels(PMean_L_sub2$Week1) , "\n ")
 
 # Photosynthesis
 PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 

@@ -144,7 +144,7 @@ grid.arrange(P, S, ncol=2, nrow=2)
 ```
 
 # Plant physiological responses
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 # Plant Physiology
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
 head(PMean)
@@ -152,10 +152,10 @@ head(PMean_L_sub2)
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 # Fv/Fm
-FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
-                   geom_boxplot() + theme_boxplot() + facet_wrap(~ Week1) +
+FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) + 
+                   geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
                    xlab("Herbivore Treatment") + ylab("Fv/Fm") + 
                    theme(legend.position=c(.9, .1),
                          panel.border = element_rect(colour = "black", fill=NA)) +
@@ -168,13 +168,14 @@ FvFmPlot
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 # Photosynthesis
 PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
                     geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
                     coord_cartesian(ylim = c(0, 30) + c(-.25, .25)) +
                     xlab("Herbivore Treatment") + ylab("Photosynthesis") + 
-                    theme(legend.position=c(.9, .4),
+                    theme(legend.position=c(.9, .35),
                           panel.border = element_rect(colour = "black", fill=NA)) +
                     scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                     breaks=c("NC","Oil","Core","OilCore"),
@@ -185,7 +186,8 @@ PhotoPlot
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 # qN 
 qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
@@ -202,7 +204,8 @@ qNPlot
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 # qP
 qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~Week1, ncol=2) +
