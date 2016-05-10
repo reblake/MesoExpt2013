@@ -39,8 +39,25 @@ theme_boxplot <- function(base_size = 12){
           axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
 }
 ```
+# Figure List: 
+Fig 1: 4 panels of environmental conditions  
+Fig 2: 5 panels of biomass with expected stressor responses  
+Fig 3: 2-3 panels physiological responses faceted by week  
+Fig 4: isotope results  
+Fig 5: SEM of all results  
 
-# Expected Multi-Stress with biomass and abundances of stems and herbivores
+# Table List: 
+Table 1: ANOVA results  
+Table 2: Effect size results  
+
+# Experimental Conditions
+```{r, include=FALSE, echo=FALSE}
+
+
+```
+
+
+# Biomass and abundances of stems and herbivores with expected multi-stress 
 ```{r, include=FALSE, echo=FALSE}
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r")
  
@@ -53,7 +70,7 @@ dodge <- position_dodge(width=0.9)
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1, color="black")) + 
             stat_summary(fun.y="mean", geom="bar", position="dodge") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
@@ -72,7 +89,7 @@ L
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) + 
             stat_summary(fun.y="mean", geom="bar", position="dodge") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
@@ -89,7 +106,7 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) +
 N
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1, color="black")) + 
             stat_summary(fun.y="mean", geom="bar", position="dodge") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
@@ -107,7 +124,7 @@ LR
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black")) + 
             stat_summary(fun.y="mean", geom="bar", position="dodge") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
@@ -122,7 +139,7 @@ P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black"))
 P
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, include=FALSE}
 S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1, color="black")) + 
             stat_summary(fun.y="mean", geom="bar", position="dodge") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +

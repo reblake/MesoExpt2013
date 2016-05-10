@@ -34,6 +34,12 @@ theme_boxplot <- function(base_size = 12){
 ##########################################
 
 #############################
+# Experimental conditions
+
+
+
+
+#############################
 # Expected Multi-Stress with biomass and abundances of stems and herbivores
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r")
  
@@ -211,7 +217,8 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 qPPlot
 
-
+##############################
+# Isotopes
 
 
 
