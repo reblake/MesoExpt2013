@@ -104,7 +104,7 @@ TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=Total.Hydrocarbon, fill=Chem1
 
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=10}
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 grid.arrange(Temp_bar, TtlHydro, Light_bar, Sulf_box, ncol=2, nrow=2)
 
 ```
@@ -208,7 +208,7 @@ S
  
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=10}
+```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
 grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
 ```
