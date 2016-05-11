@@ -35,9 +35,44 @@ theme_boxplot <- function(base_size = 12){
 
 #############################
 # Experimental conditions
+source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/TempLight_HOBO_MesoExpt 2013.r")
+
+Temp_bar <- ggplot(data=Temp_raw, aes(x=Oiled, y=Temp_degC, color=Oiled)) + 
+                   geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "a") + 
+                   ylab(expression(paste("Temperature (", degree ~ C,")"))) + 
+                   scale_x_discrete(breaks=c("N","Y"), labels=c("Not Oiled","Oiled")) + 
+                   scale_color_grey(start = 0.6, end = 0) +
+                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+
+Light_bar <- ggplot(data=Temp_raw_Lday, aes(x=Oiled, y=Intensity_Lux, color=Oiled)) + 
+             geom_boxplot() + xlab("") + theme_boxplot() + labs(title= "c") + 
+             ylab(expression(paste("Light Intensity ( ", Lux," )"))) +
+             scale_x_discrete(breaks=c("N","Y"), labels=c("Not Oiled","Oiled")) + 
+             scale_color_grey(start = 0.6, end = 0) +
+             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+
+source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/Sulfides_MesoExpt 2013.r")
+
+Sulf_box <- ggplot(data=Sraw, aes(x=Chem1, y=Conc_ppm, color= Chem1)) + 
+                   geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "d") + 
+                   ylab(expression(paste("Porewater Sulfide (ppm)"))) + 
+                   scale_x_discrete(breaks=c("NC","Core","Oil","OilCore"), 
+                                    labels=c("No\nChemicals","Dispersant","Oil","Oil + \nDispersant")) +
+                   scale_color_grey(start = 0.8, end = 0) +
+                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
+
+source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Oil/Oiling_FINAL Data_MesoExpt2013.r")
+
+TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=Total.Hydrocarbon, fill=Chem1)) + 
+                 geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "b") +  
+                 ylab("Total Hydrocarbons") +
+                 scale_x_discrete(breaks=c("NG","P","S","SP"),
+                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) +
+                 scale_fill_grey(start = 1, end = 0) +
+                 theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
 
 
-
+grid.arrange(Temp_bar, TtlHydro, Light_bar, Sulf_box, ncol=2, nrow=2)
 
 #############################
 # Expected Multi-Stress with biomass and abundances of stems and herbivores
@@ -169,8 +204,8 @@ FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) +
                    theme(legend.position=c(.9, .1),
                          panel.border = element_rect(colour = "black", fill=NA)) +
                    scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                   breaks=c("NC","Oil","Core","OilCore"),
-                                   labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) +
+                                   breaks=c("NC","Core","Oil","OilCore"),
+                                   labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                    scale_x_discrete(breaks=c("NG","P","S","SP"),
                                     labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 FvFmPlot
@@ -184,7 +219,7 @@ PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) +
                           panel.border = element_rect(colour = "black", fill=NA)) +
                     scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                     breaks=c("NC","Oil","Core","OilCore"),
-                                    labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) +
+                                    labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                     scale_x_discrete(breaks=c("NG","P","S","SP"),
                                      labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 PhotoPlot
@@ -198,7 +233,7 @@ qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) +
                        panel.border = element_rect(colour = "black", fill=NA)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                  breaks=c("NC","Oil","Core","OilCore"),
-                                 labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) +
+                                 labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 qNPlot
@@ -212,7 +247,7 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                        panel.border = element_rect(colour = "black", fill=NA)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                  breaks=c("NC","Oil","Core","OilCore"),
-                                 labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) +
+                                 labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 qPPlot

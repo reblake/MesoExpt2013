@@ -4,9 +4,7 @@
 ###  July 17, 2013;  Rachael E. Blake           ###
 ###################################################
 
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Sulfides\\")
-
-Sraw <- read.csv("Sulfide_MesoExpt2013.csv")
+Sraw <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Sulfides/Sulfide_MesoExpt2013.csv")
 head(Sraw)
 tail(Sraw)
 
@@ -24,15 +22,17 @@ library(car)
 
 SulfLM <- lm(Conc_ppm ~ Oil*Corexit*Herbivore, data=Sraw)#,
              #contrasts=list(Oil=contr.sum, Corexit=contr.sum, Herbivore=contr.sum))
-
 summary(SulfLM)#$coeff  # give summary of all coefficients - useful to see what's missing
-
 vif(SulfLM)  # calculates variance inflation factor  to determine multicollinearity
-
 Anova(SulfLM, type="III") # calculates ANOVA table with Type III SS
 
+SulfLM2 <- lm(Conc_ppm ~ Chem, data=Sraw)
+Anova(SulfLM2, type="III")
 
+# Plot
+Sraw$Chem1 <- factor(Sraw$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore')) # for ordering the plot
 
-
+Sulf_box <- ggplot(data=Sraw, aes(x=Chem, y=Conc_ppm, color= Chem1)) + 
+                   geom_boxplot() 
 
 

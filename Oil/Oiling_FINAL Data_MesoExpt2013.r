@@ -43,8 +43,24 @@ theme_boxplot <- function(base_size = 12){
 ##########################################
 ##########
 
-
 colors <- c("green","red","yellow","orange")
+
+# Total Hydrocarbons
+OI_tot <- OI %>%
+          select(Field.ID.., Date, Time_Step, Bucket, Treat, Chem, Oil, Corexit, Herbivore,
+                 Total.Alkanes, Total.Aromatics) %>%
+          mutate(Total.Hydrocarbon = Total.Alkanes + Total.Aromatics)
+OI_tot$Chem1 <- factor(OI_tot$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
+
+TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=Total.Hydrocarbon, fill=Chem1)) + 
+                 geom_boxplot() + theme_boxplot() + ylab("Total Hydrocarbons") +
+                 theme(legend.background=element_blank(),
+                       legend.text=element_text(size=18), legend.position=c(.95, .85),
+                       axis.text=element_text(size=20), axis.title.y=element_text(vjust=0),
+                       panel.border=element_blank(), axis.line=element_line(color='black')) +
+                 scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
+TtlHydro
+
 # Total Alkanes       
 OI$Chem1 <- factor(OI$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 TtlAlk <- ggplot(data=OI, aes(x=Herbivore, y=Total.Alkanes, fill=Chem1)) + 
