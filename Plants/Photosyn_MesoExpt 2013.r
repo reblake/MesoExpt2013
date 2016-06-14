@@ -6,7 +6,7 @@
 
 # Load libraries
 library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scales)
-library(car) ; library(gridExtra) 
+library(car) ; library(gridExtra) ; library(tidyr)
 
 # Read in data file of all photosynthesis data
 PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
@@ -28,16 +28,29 @@ PMean <- PhotoALL %>%
          mutate(Week = ifelse((Date %in% c("20-May","21-May","23-May","24-May")),'Initial (Week 1)',
                        ifelse((Date %in% c("27-May","28-May","30-May","31-May")),'Week 2',
                        ifelse((Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun")),'Week 3',
-                       ifelse((Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul")),'Final (Week 8)',""))))
+                       ifelse((Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul")),'Final (Week 8)',"")))),
+                WeekB = ifelse((Date %in% c("20-May","21-May","23-May","24-May","27-May",
+                                            "28-May","30-May","31-May")),'Initial',
+                        ifelse((Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun")),"Week 3",
+                        ifelse((Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul")),'Final',"")))
                 )
          
 # for ordering the plots
 PMean$Chem1 <- factor(PMean$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 PMean$Week1 <- factor(PMean$Week, levels=c('Initial (Week 1)', 'Week 2', 'Week 3', 'Final (Week 8)'))
+PMean$WeekBb <- factor(PMean$WeekB, levels=c('Initial','Week 3','Final'))
 levels(PMean$Week1) <- paste0(" \n", levels(PMean$Week1) , "\n ")
+levels(PMean$WeekBb) <- paste0(" \n", levels(PMean$WeekBb) , "\n ")
 
 
 #write.csv(PMean,"C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\LICOR Files_Meso Expt\\Photo_Mean_MesoExpt2013.csv")
+
+PMean_long <- PMean %>%
+              select(Date, MeasType, Bucket.Number, Treatment, Chem, Oil, Corexit, Herbivore, Photo, Fv.Fm, 
+                     qP, qN, Week, Week1, Chem1, WeekBb) %>%
+              gather(VarType, Value, -c(Date, MeasType, Bucket.Number, Treatment, Chem, Oil, Corexit, Herbivore,
+                                        Week, Week1, Chem1, WeekBb))
+
 
 #############################################################
 # Subsetting the data
@@ -84,18 +97,18 @@ colors <- c("green","red","yellow","orange")
 
 # Fv/Fm
 FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
-                    geom_boxplot() + theme_bw() + facet_wrap(~ Week1) +
-                    theme(strip.text.x=element_text(size=14),
-                          strip.text.x=element_text(size=14, angle=90),
-                          strip.background=element_rect(fill="white"),
-                          panel.grid=element_blank(),legend.key=element_blank(),
-                          legend.background=element_blank(),legend.text=element_text(size=12),
-                          legend.position=c(.93, .1),axis.text=element_text(size=18),
-                          panel.border=element_blank(),axis.line=element_line(color='black'),
-                          panel.background=element_blank(),plot.background=element_blank(),
-                          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-                          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
-                     scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
+                  geom_boxplot() + theme_bw() + facet_wrap(~ Week1) +
+                  theme(strip.text.x=element_text(size=14),
+                        strip.text.x=element_text(size=14, angle=90),
+                        strip.background=element_rect(fill="white"),
+                        panel.grid=element_blank(),legend.key=element_blank(),
+                        legend.background=element_blank(),legend.text=element_text(size=12),
+                        legend.position=c(.93, .1),axis.text=element_text(size=18),
+                        panel.border=element_blank(),axis.line=element_line(color='black'),
+                        panel.background=element_blank(),plot.background=element_blank(),
+                        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                   scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
 
 
 
@@ -103,7 +116,7 @@ FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)
 # NOTE: Have to remove May 20th data...it's weird from some reason
 PMean_L_sub <- PMean_L %>% 
                filter(Date != "20-May") %>%
-               select(Date, MeasType, Treatment, Chem, Herbivore, Photo, qN, qP, Week, Chem1, Week1)
+               select(Date, MeasType, Treatment, Chem, Herbivore, Fv.Fm, Photo, qN, qP, Week, Chem1, Week1, WeekB)
 
 # and then still include all treatment combos so the plotting comes out correctly
 table(PMean_L_sub$Herbivore, PMean_L_sub$Chem1, PMean_L_sub$Week1)
@@ -123,7 +136,7 @@ table(PMean_L_sub2$Herbivore, PMean_L_sub2$Chem1, PMean_L_sub2$Week1)
 
 # Photosynthesis
 PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
-                    geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ Week1, ncol=2) +
+                    geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ WeekB, ncol=2) +
                     coord_cartesian(ylim = c(0, 30) + c(-.25, .25)) +
                     theme(strip.text.x=element_text(size=14),
                           strip.text.x=element_text(size=14, angle=90),
@@ -175,6 +188,23 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                  scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
 
+
+# large plot of all
+whPlot <- ggplot(data=subset(PMean_long, WeekBb %in% c("Initial","Final")), aes(x=Herbivore, y=qP)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_grid(~WeekBb) +
+                 coord_cartesian(ylim = c(0.25, 0.75) + c(-.25, .25)) +
+                 theme(strip.text.x=element_text(size=14),
+                       strip.text.x=element_text(size=14, angle=90),
+                       strip.background=element_rect(fill="white"),
+                       panel.grid=element_blank(),legend.key=element_blank(),
+                       legend.background=element_blank(),legend.text=element_text(size=12),
+                       legend.position=c(.1, .9),axis.text=element_text(size=18),
+                       panel.border=element_blank(),axis.line=element_line(color='black'),
+                       panel.background=element_blank(),plot.background=element_blank(),
+                       axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+                       axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
+                 scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
+whPlot
 
 
 ###### FINAL DATA (END OF EXPERIMENT) #########################

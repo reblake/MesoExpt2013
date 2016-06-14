@@ -218,7 +218,7 @@ PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) +
                     theme(legend.position=c(.9, .4),
                           panel.border = element_rect(colour = "black", fill=NA)) +
                     scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                    breaks=c("NC","Oil","Core","OilCore"),
+                                    breaks=c("NC","Core","Oil","OilCore"),
                                     labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                     scale_x_discrete(breaks=c("NG","P","S","SP"),
                                      labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
@@ -232,7 +232,7 @@ qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) +
                  theme(legend.position=c(.1, .9),
                        panel.border = element_rect(colour = "black", fill=NA)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                 breaks=c("NC","Oil","Core","OilCore"),
+                                 breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
@@ -246,7 +246,7 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                  theme(legend.position=c(.1, .9), 
                        panel.border = element_rect(colour = "black", fill=NA)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                 breaks=c("NC","Oil","Core","OilCore"),
+                                 breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
