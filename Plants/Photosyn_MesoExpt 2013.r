@@ -49,7 +49,12 @@ PMean_long <- PMean %>%
               select(Date, MeasType, Bucket.Number, Treatment, Chem, Oil, Corexit, Herbivore, Photo, Fv.Fm, 
                      qP, qN, Week, Week1, Chem1, WeekBb) %>%
               gather(VarType, Value, -c(Date, MeasType, Bucket.Number, Treatment, Chem, Oil, Corexit, Herbivore,
-                                        Week, Week1, Chem1, WeekBb))
+                                        Week, Week1, Chem1, WeekBb)) %>%
+              filter(Week != "Week 3") %>%
+              filter(VarType != "qN" | Week != "Week 1") %>%
+              filter(VarType != "qP" | Week != "Week 1") %>%
+              filter(VarType != "Photo" | Week != "Week 1") %>%
+              filter(VarType != "Fv.Fm" | Week != "Week 2")
 
 
 #############################################################
@@ -190,9 +195,9 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
 
 
 # large plot of all
-whPlot <- ggplot(data=subset(PMean_long, WeekBb %in% c("Initial","Final")), aes(x=Herbivore, y=qP)) + 
-                 geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_grid(~WeekBb) +
-                 coord_cartesian(ylim = c(0.25, 0.75) + c(-.25, .25)) +
+whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_bw() + 
+                 facet_grid(VarType~WeekBb, scales="free") +
                  theme(strip.text.x=element_text(size=14),
                        strip.text.x=element_text(size=14, angle=90),
                        strip.background=element_rect(fill="white"),
@@ -205,6 +210,7 @@ whPlot <- ggplot(data=subset(PMean_long, WeekBb %in% c("Initial","Final")), aes(
                        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')) +
                  scale_fill_manual(values=colors, guide=guide_legend(title = NULL))  
 whPlot
+
 
 
 ###### FINAL DATA (END OF EXPERIMENT) #########################

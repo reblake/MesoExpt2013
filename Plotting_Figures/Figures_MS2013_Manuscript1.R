@@ -196,6 +196,7 @@ grid.arrange(P, S, ncol=2, nrow=2)
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
 head(PMean)
 head(PMean_L_sub2)
+head(PMean_long)
 
 # Fv/Fm
 FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) + 
@@ -251,6 +252,9 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 qPPlot
+
+# all plots
+
 
 ##############################
 # Isotopes
