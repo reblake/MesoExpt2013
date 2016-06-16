@@ -9,7 +9,7 @@ library(lazyeval) ; library(reshape2)
 
 # All data
 AllD <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
-AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Oil', 'Core', 'OilCore'))
+AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 
 
 # function to subset the data by full treatment

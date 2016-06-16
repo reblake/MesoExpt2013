@@ -51,10 +51,17 @@ PMean_long <- PMean %>%
               gather(VarType, Value, -c(Date, MeasType, Bucket.Number, Treatment, Chem, Oil, Corexit, Herbivore,
                                         Week, Week1, Chem1, WeekBb)) %>%
               filter(Week != "Week 3") %>%
-              filter(VarType != "qN" | Week != "Week 1") %>%
-              filter(VarType != "qP" | Week != "Week 1") %>%
-              filter(VarType != "Photo" | Week != "Week 1") %>%
-              filter(VarType != "Fv.Fm" | Week != "Week 2")
+              filter(VarType != "qN" | Week != "Initial (Week 1)") %>%
+              filter(VarType != "qP" | Week != "Initial (Week 1)") %>%
+              filter(VarType != "Photo" | Week != "Initial (Week 1)") %>%
+              filter(VarType != "Fv.Fm" | Week != "Week 2") %>%
+              filter(VarType != "Fv.Fm" | MeasType != "Light") %>%
+              filter(VarType != "qP" | MeasType != "Dark") %>%
+              filter(VarType != "qN" | MeasType != "Dark") %>%
+              filter(VarType != "Photo" | MeasType != "Dark") %>%
+              mutate_each(funs(factor), VarType)
+
+levels(PMean_long$VarType) <- paste0(" \n", levels(PMean_long$VarType), "\n ")
 
 
 #############################################################

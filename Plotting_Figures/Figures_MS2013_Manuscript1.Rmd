@@ -179,7 +179,7 @@ LR
 
 ```{r, echo=FALSE, warning=FALSE, include=FALSE}
 P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black")) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge") +
+            stat_summary(fun.y="mean", geom="bar", position=dodge) +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
@@ -218,79 +218,30 @@ grid.arrange(P, S, ncol=2, nrow=2)
 # Plant Physiology
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
 head(PMean)
-head(PMean_L_sub2)
+head(PMean_long)
 
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-# Fv/Fm
-FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) + 
-                   geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
-                   xlab("Herbivore Treatment") + ylab("Fv/Fm") + 
-                   theme(legend.position=c(.9, .1),
-                         panel.border = element_rect(colour = "black", fill=NA)) +
-                   scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                   breaks=c("NC","Core","Oil","OilCore"),
-                                   labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-                   scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                    labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-FvFmPlot
+```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=10}
 
-```
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-# Photosynthesis
-PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
-                    geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
-                    coord_cartesian(ylim = c(0, 30) + c(-.25, .25)) +
-                    xlab("Herbivore Treatment") + ylab("Photosynthesis") + 
-                    theme(legend.position=c(.9, .35),
-                          panel.border = element_rect(colour = "black", fill=NA)) +
-                    scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                    breaks=c("NC","Core","Oil","OilCore"),
-                                    labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-                    scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                     labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-PhotoPlot
-
-```
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-# qN 
-qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) + 
-                 geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~ Week1, ncol=2) +
-                 coord_cartesian(ylim = c(1.5, 3.5) + c(-.25, .25)) +
-                 xlab("Herbivore Treatment") + ylab("non-photochemical quenching") + 
-                 theme(legend.position=c(.1, .9),
-                       panel.border = element_rect(colour = "black", fill=NA)) +
+# all plots
+whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
+                 facet_grid(VarType~WeekBb, scales="free") +
+                 xlab("Herbivore Treatment") + ylab("") + 
+                 theme(legend.position = c(.9, .825), 
+                       panel.border = element_rect(colour = "black", fill=NA),
+                       strip.text.y = element_text(angle=-90, lineheight=0.5)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-qNPlot
+whPlot
 
 ```
 
 
-```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-# qP
-qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) + 
-                 geom_boxplot(aes(fill=Chem1)) + theme_boxplot() + facet_wrap(~Week1, ncol=2) +
-                 coord_cartesian(ylim = c(0.25, 0.75) + c(-.25, .25)) +
-                 xlab("Herbivore Treatment") + ylab("photochemical quenching") + 
-                 theme(legend.position=c(.1, .9), 
-                       panel.border = element_rect(colour = "black", fill=NA)) +
-                 scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                                 breaks=c("NC","Core","Oil","OilCore"),
-                                 labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-                 scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-qPPlot
-
-```
 
 
 

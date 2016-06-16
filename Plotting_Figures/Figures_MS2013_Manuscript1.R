@@ -161,15 +161,15 @@ DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) +
 DR
 
 P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun.y="mean", geom="bar", position=dodge, color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
             theme_boxplot() + xlab("") + ylab("Number of Insects") + labs(title= "d") +
-            scale_fill_manual(values=barcolor, breaks=c("NC","Oil","Core","OilCore"),
-                              labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) + 
+            scale_fill_manual(values=barcolor, breaks=c("NC","Core","Oil","OilCore"),
+                              labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
             scale_colour_manual(values=baroutline, breaks=c("NC","Oil","Core","OilCore"),
-                              labels=c("No Chemicals","Oil","Dispersant","Oil + Dispersant")) + 
+                              labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
@@ -254,6 +254,20 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
 qPPlot
 
 # all plots
+whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
+                 geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
+                 facet_grid(VarType~WeekBb, scales="free") +
+                 xlab("Herbivore Treatment") + ylab("") + 
+                 theme(legend.position = c(.9, .825), 
+                       panel.border = element_rect(colour = "black", fill=NA),
+                       strip.text.y = element_text(angle=-90, lineheight=0.5)) +
+                 scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                                 breaks=c("NC","Core","Oil","OilCore"),
+                                 labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+                 scale_x_discrete(breaks=c("NG","P","S","SP"),
+                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+whPlot
+  
 
 
 ##############################
