@@ -3,7 +3,7 @@
 ###  Script by Rachael E. Blake
 ###  Sept. 2014
 ######################################
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales) ; library(reshape2)
+library(ggplot2) ; library(plyr) ;library(dplyr) ; library(grid) ; library(scales) ; library(reshape2)
 
 
 OI <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Oiling stuff/OilConc_FINAL_MesoExpt 2013.csv")
