@@ -256,7 +256,8 @@ qPPlot
 # all plots
 whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
-                 facet_grid(VarType~WeekBb, scales="free") +
+                 facet_grid(VarType~WeekBb, scales="free", switch="y") +
+                 #facet_wrap(VarType~WeekBb, scales="free_y", ncol=2, switch="y") +
                  xlab("Herbivore Treatment") + ylab("") + 
                  theme(legend.position = c(.9, .825), 
                        panel.border = element_rect(colour = "black", fill=NA),
