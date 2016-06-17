@@ -49,7 +49,8 @@ colors <- c("green","red","yellow","orange")
 OI_tot <- OI %>%
           select(Field.ID.., Date, Time_Step, Bucket, Treat, Chem, Oil, Corexit, Herbivore,
                  Total.Alkanes, Total.Aromatics) %>%
-          mutate(Total.Hydrocarbon = Total.Alkanes + Total.Aromatics)
+          mutate(Total.Hydrocarbon = Total.Alkanes + Total.Aromatics, 
+                 log_Tot_Hydrocarbon = log(Total.Hydrocarbon))
 OI_tot$Chem1 <- factor(OI_tot$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 
 TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=Total.Hydrocarbon, fill=Chem1)) + 
