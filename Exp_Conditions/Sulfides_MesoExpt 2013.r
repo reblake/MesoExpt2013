@@ -8,6 +8,12 @@ Sraw <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Sulfides/Sulfide_Me
 head(Sraw)
 tail(Sraw)
 
+mean_sulf <- Sraw %>%
+             select(Treat, Chem, Oil, Corexit, Herbivore, Conc_ppm) %>%
+             summarize(mean_sulf_conc = mean(Conc_ppm),
+                       max_sulf_conc = max(Conc_ppm),
+                       min_sulf_conc = min(Conc_ppm))
+
 #ANOVA TYPE I SS
 #SulfAOV <- aov(Conc_ppm ~ Oil*Corexit*Herbivore, Sraw)
 #summary(SulfAOV)

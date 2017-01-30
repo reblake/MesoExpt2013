@@ -11,11 +11,32 @@ names(Temp_raw)
 oiled <- Temp_raw[Temp_raw$Oiled=="Y",]  ; head(oiled)
 unoiled <- Temp_raw[Temp_raw$Oiled=="N",]  ; head(unoiled)
 
+# mean oiled and un-oiled temps overall
 mean(oiled$Temp_degC)  ;  sd(oiled$Temp_degC)
 mean(unoiled$Temp_degC)  ;  sd(unoiled$Temp_degC)
+# mean daily temps calc
+daily_mean_temp <- Temp_raw %>%
+                   select(-Logger, -Intensity_Lux, -Time, -Oiled) %>%
+                   group_by(Date, Date1) %>%
+                   summarize(DayMn_Temp_degC=mean(Temp_degC))
+# min and max daily temps
+min(daily_mean_temp$DayMn_Temp_degC) ; max(daily_mean_temp$DayMn_Temp_degC)
 
+# mean oiled and un-oiled light overall
 mean(oiled$Intensity_Lux)  ;  sd(oiled$Intensity_Lux)
 mean(unoiled$Intensity_Lux)  ;  sd(unoiled$Intensity_Lux)
+# mean light overall
+mean(Temp_raw$Intensity_Lux)
+# mean daily light calc
+daily_mean_light <- Temp_raw %>%
+                    select(-Logger, -Temp_degC, -Time, -Oiled) %>%
+                    filter(!(Intensity_Lux==0)) %>%
+                    group_by(Date, Date1) %>%
+                    summarize(DayMn_Light_Lux=mean(Intensity_Lux))
+# max daily light
+max(daily_mean_light$DayMn_Light_Lux) 
+
+
 
 ######## TEMPERATURE ############################################
 

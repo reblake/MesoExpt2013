@@ -14,6 +14,18 @@ names(OI)
 OI_red <- OI[-c(53,54),] # These are the samples Buffy Meyer thinks were switched or mis-labeled.
 names(OI_red)
 
+# NOTE: Alkanes are reported in mg/kg-1, and Aromatics are reported in microg/kg-1
+
+# convert Aromatics from microg/kg-1 to mg/kg-1
+OI$Total.Aromatics.mg <- OI$Total.Aromatics * 1000
+
+# look at oiled vs. un-oiled mean hydrocarbons using log transformed data from line 61
+OI_calcs <- OI_tot %>%
+            select(Oil, log_Tot_Hydrocarbon) %>%
+            group_by(Oil) %>%
+            summarize(mean_Tot_Hydroc = mean(log_Tot_Hydrocarbon))
+lm(log_Tot_Hydrocarbon ~ Oil, data=OI_tot)
+
 
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
@@ -26,7 +38,7 @@ theme_boxplot <- function(base_size = 12){
           legend.position="none",
           plot.margin=unit(c(0.5,1,0.5,1), "lines"), # respectively: top, right, bottom, left; refers to margin *outside* labels; default is c(1,1,0.5,0.5)
           panel.border=element_blank(),
-          panel.margin=unit(0,"lines"),
+          panel.spacing=unit(0,"lines"),
           axis.ticks.length=unit(1,"mm"),
           axis.text.x = element_text(margin=margin(5,0,0,0)),
           axis.text.y = element_text(margin=margin(0,5,0,0)),
@@ -48,8 +60,8 @@ colors <- c("green","red","yellow","orange")
 # Total Hydrocarbons
 OI_tot <- OI %>%
           select(Field.ID.., Date, Time_Step, Bucket, Treat, Chem, Oil, Corexit, Herbivore,
-                 Total.Alkanes, Total.Aromatics) %>%
-          mutate(Total.Hydrocarbon = Total.Alkanes + Total.Aromatics, 
+                 Total.Alkanes, Total.Aromatics, Total.Aromatics.mg) %>%
+          mutate(Total.Hydrocarbon = Total.Alkanes + Total.Aromatics.mg, 
                  log_Tot_Hydrocarbon = log(Total.Hydrocarbon))
 OI_tot$Chem1 <- factor(OI_tot$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 
