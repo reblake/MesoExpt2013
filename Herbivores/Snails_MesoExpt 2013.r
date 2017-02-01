@@ -4,9 +4,7 @@
 ###    Script by Rachael Blake, Dec 2013  ###
 #############################################
 
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Snails")
-
-SN <- read.csv("Snail data_Final_Meso Expt 2013.csv")
+SN <- read.csv("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Snails\\Snail data_Final_Meso Expt 2013.csv")
 
 names(SN)
 head(SN)

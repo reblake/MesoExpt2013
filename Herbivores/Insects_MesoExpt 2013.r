@@ -4,9 +4,8 @@
 ###    Script by Rachael Blake, Jan 2014  ###
 #############################################
 
-setwd("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Insects")
 
-ins <- read.csv("Insects_MesoExpt 2013.csv")
+ins <- read.csv("C:\\Users\\rblake\\Documents\\LSU\\MesoExp_2013\\Insects\\Insects_MesoExpt 2013.csv")
 head(ins)
 tail(ins)
 

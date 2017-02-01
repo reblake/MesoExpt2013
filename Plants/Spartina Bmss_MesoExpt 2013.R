@@ -227,7 +227,7 @@ TtlP1 <- PMass %>%
 #
 # ANOVA Total Biomass
 options(contrasts=c("contr.sum","contr.poly"))
-FnlPMass <- lm(Dry_Wgt ~ Oil*Corexit*Herbivore, data=TtlP1)       
+FnlPMass <- lm(Total_Dry_Wgt ~ Oil*Corexit*Herbivore, data=TtlP1)       
 Anova(FnlPMass, type="III") # calculates ANOVA table with Type III SS
 
 # ANOVA Live Biomass
