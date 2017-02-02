@@ -4,9 +4,13 @@
 ###  Script created by Rachael Blake    Sept 2013             ###
 #################################################################
 
+library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
+
 Temp_raw <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/HOBO Data/Temp_Data_MASTER_MesoExpt2013.csv")
 head(Temp_raw)
 names(Temp_raw)
+
+Temp_raw$Date1 <- as.Date(Temp_raw$Date, format="%m/%d/%Y")
 
 oiled <- Temp_raw[Temp_raw$Oiled=="Y",]  ; head(oiled)
 unoiled <- Temp_raw[Temp_raw$Oiled=="N",]  ; head(unoiled)
@@ -41,7 +45,6 @@ max(daily_mean_light$DayMn_Light_Lux)
 ######## TEMPERATURE ############################################
 
 ## Plotting the data
-library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
 
 Temp_raw$Date1 <- as.Date(Temp_raw$Date, format="%m/%d/%Y")
 

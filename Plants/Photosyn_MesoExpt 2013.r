@@ -110,7 +110,7 @@ colors <- c("green","red","yellow","orange")
 # Fv/Fm
 FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm), fill=Chem1)) + 
                   geom_boxplot() + theme_bw() + facet_wrap(~ Week1) +
-                  theme(strip.text.x=element_text(size=14),
+                  theme(#strip.text.x=element_text(size=14),
                         strip.text.x=element_text(size=14, angle=90),
                         strip.background=element_rect(fill="white"),
                         panel.grid=element_blank(),legend.key=element_blank(),
@@ -150,7 +150,7 @@ table(PMean_L_sub2$Herbivore, PMean_L_sub2$Chem1, PMean_L_sub2$Week1)
 PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) + 
                     geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ WeekB, ncol=2) +
                     coord_cartesian(ylim = c(0, 30) + c(-.25, .25)) +
-                    theme(strip.text.x=element_text(size=14),
+                    theme(#strip.text.x=element_text(size=14),
                           strip.text.x=element_text(size=14, angle=90),
                           strip.background=element_rect(fill="white"),
                           panel.grid=element_blank(),legend.key=element_blank(),
@@ -170,7 +170,7 @@ PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) +
 qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~ Week1, ncol=2) +
                  coord_cartesian(ylim = c(1.5, 3.5) + c(-.25, .25)) +
-                 theme(strip.text.x=element_text(size=14),
+                 theme(#strip.text.x=element_text(size=14),
                        strip.text.x=element_text(size=14, angle=90),
                        strip.background=element_rect(fill="white"),
                        panel.grid=element_blank(),legend.key=element_blank(),
@@ -188,7 +188,7 @@ qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) +
 qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_bw() + facet_wrap(~Week1, ncol=2) +
                  coord_cartesian(ylim = c(0.25, 0.75) + c(-.25, .25)) +
-                 theme(strip.text.x=element_text(size=14),
+                 theme(#strip.text.x=element_text(size=14),
                        strip.text.x=element_text(size=14, angle=90),
                        strip.background=element_rect(fill="white"),
                        panel.grid=element_blank(),legend.key=element_blank(),
@@ -205,7 +205,7 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
 whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_bw() + 
                  facet_grid(VarType~WeekBb, scales="free") +
-                 theme(strip.text.x=element_text(size=14),
+                 theme(#strip.text.x=element_text(size=14),
                        strip.text.x=element_text(size=14, angle=90),
                        strip.background=element_rect(fill="white"),
                        panel.grid=element_blank(),legend.key=element_blank(),

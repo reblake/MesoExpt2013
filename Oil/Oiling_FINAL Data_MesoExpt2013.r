@@ -19,13 +19,6 @@ names(OI_red)
 # convert Aromatics from microg/kg-1 to mg/kg-1
 OI$Total.Aromatics.mg <- OI$Total.Aromatics * 1000
 
-# look at oiled vs. un-oiled mean hydrocarbons using log transformed data from line 61
-OI_calcs <- OI_tot %>%
-            select(Oil, log_Tot_Hydrocarbon) %>%
-            group_by(Oil) %>%
-            summarize(mean_Tot_Hydroc = mean(log_Tot_Hydrocarbon))
-lm(log_Tot_Hydrocarbon ~ Oil, data=OI_tot)
-
 
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
@@ -73,6 +66,15 @@ TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=Total.Hydrocarbon, fill=Chem1
                        panel.border=element_blank(), axis.line=element_line(color='black')) +
                  scale_fill_manual(values=colors, guide=guide_legend(title = NULL))
 TtlHydro
+
+# look at oiled vs. un-oiled mean hydrocarbons using log transformed data from line 61
+OI_calcs <- OI_tot %>%
+            select(Oil, log_Tot_Hydrocarbon) %>%
+            group_by(Oil) %>%
+            summarize(mean_Tot_Hydroc = mean(log_Tot_Hydrocarbon))
+lm(log_Tot_Hydrocarbon ~ Oil, data=OI_tot)
+
+
 
 # Total Alkanes       
 OI$Chem1 <- factor(OI$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))

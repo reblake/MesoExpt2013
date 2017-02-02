@@ -7,7 +7,7 @@ output: html_document
 
 ```{r, include=FALSE, echo=FALSE}
 library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr)
-library(grid) ; library(car) 
+library(grid) ; library(car) ; library(tidyverse) ; library(forcats)
 ```
 
 
@@ -21,7 +21,7 @@ theme_boxplot <- function(base_size = 12){
           legend.text=element_text(size=I(13)),
           legend.key=element_blank(),
           legend.title=element_blank(),
-          legend.position="none",
+          #legend.position="none",
           plot.margin=unit(c(0.5,1,0.5,1), "lines"), # respectively: top, right, bottom, left; refers to margin *outside* labels; default is c(1,1,0.5,0.5)
           panel.border=element_blank(),
           panel.spacing=unit(0,"lines"),
@@ -35,8 +35,8 @@ theme_boxplot <- function(base_size = 12){
           panel.grid.minor=element_blank(),
           strip.text.x=element_text(size=14),
           strip.background=element_rect(colour='black', fill='white'),
-          axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-          axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid')
+          #axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+          axis.line = element_line(colour = 'black', size=0.5, linetype='solid')
           )
 }
 ```
@@ -53,7 +53,7 @@ Table 2: Effect size results
 
 # Experimental Conditions
 ```{r, include=FALSE, echo=FALSE}
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/TempLight_HOBO_MesoExpt 2013.r")
+source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/TempLight_HOBO_MesoExpt_2013.r")
 
 ```
 
@@ -64,7 +64,8 @@ Temp_bar <- ggplot(data=Temp_raw, aes(x=Oiled, y=Temp_degC, color=Oiled)) +
                    ylab(expression(paste("Temperature (", degree ~ C,")"))) + 
                    scale_x_discrete(breaks=c("N","Y"), labels=c("Not Oiled","Oiled")) + 
                    scale_color_grey(start = 0.6, end = 0) +
-                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                         legend.position="none")
 
 ```
 
@@ -75,7 +76,8 @@ Light_bar <- ggplot(data=Temp_raw_Lday, aes(x=Oiled, y=Intensity_Lux, color=Oile
              ylab(expression(paste("Light Intensity ( ", Lux," )"))) +
              scale_x_discrete(breaks=c("N","Y"), labels=c("Not Oiled","Oiled")) + 
              scale_color_grey(start = 0.6, end = 0) +
-             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                   legend.position="none")
 
 ```
 
@@ -88,7 +90,8 @@ Sulf_box <- ggplot(data=Sraw, aes(x=Chem1, y=Conc_ppm, color= Chem1)) +
                    scale_x_discrete(breaks=c("NC","Core","Oil","OilCore"), 
                                     labels=c("No\nChemicals","Dispersant","Oil","Oil + \nDispersant")) +
                    scale_color_grey(start = 0.8, end = 0) +
-                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
+                   theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                         legend.position="none") 
 
 ```
 
@@ -101,7 +104,9 @@ TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=log_Tot_Hydrocarbon, fill=Che
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) +
                  scale_fill_grey(start = 1, end = 0) +
-                 theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
+                 theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                       legend.position = c(.8,.98),
+                       axis.line = element_line(colour = 'black', size=0.5, linetype='solid')) 
 
 ```
 
@@ -138,7 +143,8 @@ L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1, color="black"
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
 L   
 
 ```
@@ -156,7 +162,8 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1, color="black")) +
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
 N
 ```
 
@@ -173,7 +180,8 @@ LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1, color="bl
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
 LR
 
 ```
@@ -185,11 +193,12 @@ P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black"))
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
             theme_boxplot() + xlab("") + ylab("Number of Insects") +
-            scale_fill_manual(values=barcolor) + labs(title= "d") +
+            scale_fill_manual(values=barcolor) + labs(title= "e") +
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
 P
 ```
 
@@ -200,18 +209,19 @@ S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1, color="black"))
             geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
             geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
             theme_boxplot() + xlab("") + ylab("Change in Snail Mass (g)") +
-            scale_fill_manual(values=barcolor) + labs(title= "e") + 
+            scale_fill_manual(values=barcolor) + labs(title= "d") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
                              labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
 S
  
 ```
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-grid.arrange(L, N, LR, ncol=2, nrow=2)
-grid.arrange(P, S, ncol=2, nrow=2)
+grid.arrange(L, N, LR, S, ncol=2, nrow=2)
+grid.arrange(P, ncol=2, nrow=2)
 ```
 
 # Plant physiological responses
@@ -220,6 +230,11 @@ grid.arrange(P, S, ncol=2, nrow=2)
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
 head(PMean)
 head(PMean_long)
+
+
+PMean_long <- PMean_long %>%
+              mutate(VarType = fct_recode(VarType, " \nFv/Fm\n " = " \nFv.Fm\n ",
+                                                   " \nPhotosynthesis\n " = " \nPhoto\n "))
 
 ```
 
@@ -231,10 +246,10 @@ whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) +
                  facet_grid(VarType~WeekBb, scales="free", switch="y") +
                  xlab("Herbivore Treatment") + ylab("") + 
                  theme(legend.position = c(.88, .825), 
-                       strip.text.y=element_text(size=14),
-                       panel.margin = unit(0.25, "cm"),
+                      # strip.text.y=element_text(size=14),
+                       panel.spacing = unit(0.25, "cm"),
                        panel.border = element_rect(colour = "black", fill=NA),
-                       strip.text.y = element_text(angle=-90, lineheight=0.5)) +
+                       strip.text.y = element_text(angle=-90, lineheight=0.5,size=14)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
