@@ -103,9 +103,11 @@ TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=log_Tot_Hydrocarbon, fill=Che
                  ylab(expression(paste("Log Total Hydrocarbons ( ", mg/kg ^{-1},")"))) +  
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) +
-                 scale_fill_grey(start = 1, end = 0) +
+                 scale_fill_grey(start = 1, end = 0,
+                                 breaks=c("NC","Core","Oil","OilCore"),
+                                 labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
-                       legend.position = c(.8,.98),
+                       legend.position = c(.85,.99),
                        axis.line = element_line(colour = 'black', size=0.5, linetype='solid')) 
 
 ```
@@ -192,13 +194,20 @@ P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1, color="black"))
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
-            theme_boxplot() + xlab("") + ylab("Number of Insects") +
-            scale_fill_manual(values=barcolor) + labs(title= "e") +
-            scale_colour_manual(values=baroutline) + 
+            theme_boxplot() + xlab("") + ylab("Number of Insects") + labs(title= "e") +
+            scale_fill_manual(values=barcolor,
+                              breaks=c("NC","Core","Oil","OilCore"),
+                              labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
+            scale_colour_manual(values=baroutline, guide=FALSE) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) +
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
-                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'))
+                  axis.line = element_line(colour = 'black', size=0.5, linetype='solid'),
+                  legend.position = c(1,.98),
+                  legend.key = element_rect(color="black", size=.5)
+                  
+                  ) 
+            
 P
 ```
 
