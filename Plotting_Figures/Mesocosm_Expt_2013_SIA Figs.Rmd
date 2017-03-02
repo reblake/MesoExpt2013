@@ -5,12 +5,13 @@ date: "May 16, 2016"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr)
+```{r setup, echo=FALSE, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr) ; library(tidyverse)
+library(forcats)
 ```
 
-```{r include=FALSE}
+```{r echo=FALSE, include=FALSE}
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
 theme_boxplot <- function(base_size = 12){
@@ -22,7 +23,7 @@ theme_boxplot <- function(base_size = 12){
           legend.position="none",
           plot.margin=unit(c(0.5,1,0.5,1), "lines"), # respectively: top, right, bottom, left; refers to margin *outside* labels; default is c(1,1,0.5,0.5)
           panel.border=element_blank(),
-          panel.margin=unit(0,"lines"),
+          panel.spacing=unit(0,"lines"),
           axis.ticks.length=unit(1,"mm"),
           axis.text.x = element_text(margin=margin(5,0,0,0)),
           axis.text.y = element_text(margin=margin(0,5,0,0)),
@@ -40,54 +41,101 @@ theme_boxplot <- function(base_size = 12){
 ##########################################
 ```
 
-```{r  include=FALSE}
-Meso_expt_2013<-read.table(file.choose(),head=T)
-attach(Meso_expt_2013)
+```{r  echo=FALSE, include=FALSE}
+# read in the data file
+Meso_expt_2013 <- read.table("../Isotope_figures.txt", head=T)
+
+SIA_if_data <- Meso_expt_2013 %>% 
+               filter(Week %in% c(1,8)) %>% # filters data to only week 1 and week 8
+               mutate(Week = factor(Week),
+                      Week = fct_recode(Week, " \nInitial\n " = "1",
+                                              " \nFinal\n " = "8")) 
+
 ```
 
+
+```{r, echo=FALSE}
 #Carbon Isotope figures
-```{r}
-d13CPlot <- ggplot(data=Meso_expt_2013, aes(x=Herbivore, y=as.numeric(d13C))) + 
-  geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
-  xlab("Herbivore Treatment") + ylab("d13C") + 
-  theme(legend.position=c(.9, .1),
-        panel.border = element_rect(colour = "black", fill=NA)) +
-  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                  breaks=c("NC","Core","Oil","OilCore"),
-                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-d13CPlot
+d13CPlot <- ggplot(data=SIA_if_data, aes(x=Herbivore, y=as.numeric(d13C))) + 
+            geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
+            xlab("Herbivore Treatment") + ylab("d13C") + 
+            theme(legend.position=c(.9, .2),
+                  panel.border = element_rect(colour = "black", fill=NA),
+                  strip.text.y = element_text(angle=-90, lineheight=0.5,size=14)) +
+            scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                            breaks=c("NC","Core","Oil","OilCore"),
+                            labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+            scale_x_discrete(breaks=c("NG","P","S","SP"),
+                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+
+#d13CPlot
 ```
 
+
+```{r, echo=FALSE}
 #Nitrogen Isotope Figures
-```{r}
-d15NPlot <- ggplot(data=Meso_expt_2013, aes(x=Herbivore, y=as.numeric(d15N))) + 
-  geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
-  xlab("Herbivore Treatment") + ylab("d15N") + 
-  theme(legend.position=c(.9, .1),
-        panel.border = element_rect(colour = "black", fill=NA)) +
-  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                  breaks=c("NC","Core","Oil","OilCore"),
-                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-d15NPlot
+d15NPlot <- ggplot(data=SIA_if_data, aes(x=Herbivore, y=as.numeric(d15N))) + 
+            geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
+            xlab("Herbivore Treatment") + ylab("d15N") + 
+            theme(legend.position="none",
+                  panel.border = element_rect(colour = "black", fill=NA),
+                  strip.text.y = element_text(angle=-90, lineheight=0.5,size=14)) +
+            scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                            breaks=c("NC","Core","Oil","OilCore"),
+                            labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+            scale_x_discrete(breaks=c("NG","P","S","SP"),
+                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+
+#d15NPlot
 ```
 
+
+```{r, echo=FALSE}
 #Sulfur Isotope Figures
-```{r}
-d34SPlot <- ggplot(data=Meso_expt_2013, aes(x=Herbivore, y=as.numeric(d34S))) + 
-  geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
-  xlab("Herbivore Treatment") + ylab("d34S") + 
-  theme(legend.position=c(.9, .1),
-        panel.border = element_rect(colour = "black", fill=NA)) +
-  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
-                  breaks=c("NC","Core","Oil","OilCore"),
-                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
-  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
-d34SPlot
+d34SPlot <- ggplot(data=SIA_if_data, aes(x=Herbivore, y=as.numeric(d34S))) + 
+            geom_boxplot(aes(fill=Chem)) + theme_boxplot() + facet_wrap(~ Week, ncol=2) +
+            xlab("Herbivore Treatment") + ylab("d34S") + 
+            theme(legend.position="none",
+                  panel.border = element_rect(colour = "black", fill=NA),
+                  strip.text.y = element_text(angle=-90, lineheight=0.5,size=14)) +
+            scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                            breaks=c("NC","Core","Oil","OilCore"),
+                            labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+            scale_x_discrete(breaks=c("NG","P","S","SP"),
+                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+
+#d34SPlot
 ```
 
+```{r, echo=FALSE}
+
+SIA_if_data2 <- SIA_if_data %>%
+                gather(VarType, Value, -c(Week, Chem, Oil, Core, Herbivore)) %>% 
+                mutate(VarType = fct_recode(VarType, " \nd13C\n " = "d13C",
+                                                     " \nd15N\n " = "d15N",
+                                                     " \nd34S\n " = "d34S")) 
+
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=10}
+
+SIA_all <- ggplot(data=SIA_if_data2, aes(x=Herbivore, y=Value)) + 
+                  geom_boxplot(aes(fill=Chem)) + theme_boxplot() +
+                  facet_grid(VarType~Week, scales="free", switch="y") +
+                  xlab("Herbivore Treatment") + ylab("") + 
+                  theme(legend.position = c(.88, .75), 
+                       # strip.text.y=element_text(size=14),
+                        panel.spacing = unit(0.25, "cm"),
+                        panel.border = element_rect(colour = "black", fill=NA),
+                        strip.text.y = element_text(angle=-90, lineheight=0.5,size=14)) +
+                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                                  breaks=c("NC","Core","Oil","OilCore"),
+                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+                  scale_x_discrete(breaks=c("NG","P","S","SP"),
+                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+  
+  
+SIA_all
+
+```
 

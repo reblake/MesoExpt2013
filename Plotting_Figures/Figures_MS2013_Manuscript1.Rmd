@@ -268,6 +268,10 @@ whPlot
 
 ```
 
+```{r, echo=FALSE}
+source("./Plotting_Figure/Mesocosm_Expt_2013_SIA_Figs.Rmd")
+
+```
 
 
 
