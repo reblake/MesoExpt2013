@@ -119,8 +119,10 @@ SIA_if_data2 <- SIA_if_data %>%
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=10, fig.width=10}
 
+SIA_if_data2$Chem1 <- factor(SIA_if_data2$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore')) # for ordering the plot
+
 SIA_all <- ggplot(data=SIA_if_data2, aes(x=Herbivore, y=Value)) + 
-                  geom_boxplot(aes(fill=Chem)) + theme_boxplot() +
+                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
                   facet_grid(VarType~Week, scales="free", switch="y") +
                   xlab("Herbivore Treatment") + ylab("") + 
                   theme(legend.position = c(.88, .75), 
