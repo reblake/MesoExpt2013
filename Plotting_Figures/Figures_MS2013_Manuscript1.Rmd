@@ -229,8 +229,8 @@ S
 ```
 
 ```{r, echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
-grid.arrange(L, N, LR, S, ncol=2, nrow=2)
-grid.arrange(P, ncol=2, nrow=2)
+grid.arrange(L, N, LR, S, P, ncol=2, nrow=3)
+#grid.arrange(P, ncol=2, nrow=2)
 ```
 
 # Plant physiological responses
@@ -254,7 +254,7 @@ whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) +
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
                  facet_grid(VarType~WeekBb, scales="free", switch="y") +
                  xlab("Herbivore Treatment") + ylab("") + 
-                 theme(legend.position = c(.88, .825), 
+                 theme(legend.position = c(.88, .835), 
                       # strip.text.y=element_text(size=14),
                        panel.spacing = unit(0.25, "cm"),
                        panel.border = element_rect(colour = "black", fill=NA),
