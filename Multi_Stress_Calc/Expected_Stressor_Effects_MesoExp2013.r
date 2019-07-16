@@ -8,22 +8,22 @@ library(tidyr) ; library(plyr) ; library(dplyr) ; library(ggplot2) ; library(sca
 library(lazyeval) ; library(reshape2)
 
 # All data
-AllD <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
+AllD <- read.csv(here::here("ALL_DATA_SEM_MesoExpt2013.csv"))
 AllD$Chem1 <- factor(AllD$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore'))
 
 
 # function to subset the data by full treatment
 treatment_subset <- function(Herb_level, resp_var) {
                     sub_df <- AllD %>%
-                              filter_(.dots = list(~Herbivore == Herb_level)) %>%
-                              select_("Bucket", "Chem", resp_var) %>%
-                              spread_(key="Chem", value=resp_var)
-                    
+                              filter(Herbivore == Herb_level) %>%
+                              select("Bucket", "Chem", resp_var) %>%
+                              spread(key = "Chem", value = resp_var)
+
                     sub_2 <- sub_df %>%
                              select(-Bucket) %>%
                              summarise_each(funs(mean(., na.rm = TRUE))) %>%
                              rename(corexit=Core, control=NC, oil=Oil, oilcore=OilCore)
-                    
+
                     return(sub_2)
 }
 

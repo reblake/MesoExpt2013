@@ -6,7 +6,7 @@
 
 library(ggplot2) ; library(plyr) ; library(grid) ; library(scales)
 
-Temp_raw <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/HOBO Data/Temp_Data_MASTER_MesoExpt2013.csv")
+Temp_raw <- read.csv("D:/Documents/LSU/MesoExp_2013/HOBO Data/Temp_Data_MASTER_MesoExpt2013.csv")
 head(Temp_raw)
 names(Temp_raw)
 

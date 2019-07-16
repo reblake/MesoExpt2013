@@ -3,7 +3,7 @@
 ### Script by Rachael Blake, April 2016                           ###
 #####################################################################
 
-library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr)
+library(ggplot2) ; library(scales) ; library(gridExtra)  ; library(plyr)  ; library(dplyr) ; library(here)
 
 #######################################
 ### MAKE MY OWN THEME TO SAVE LINES OF CODE
@@ -16,7 +16,7 @@ theme_boxplot <- function(base_size = 12){
           legend.position="none",
           plot.margin=unit(c(0.5,1,0.5,1), "lines"), # respectively: top, right, bottom, left; refers to margin *outside* labels; default is c(1,1,0.5,0.5)
           panel.border=element_blank(),
-          panel.margin=unit(0,"lines"),
+          panel.spacing=unit(0,"lines"),
           axis.ticks.length=unit(1,"mm"),
           axis.text.x = element_text(margin=margin(5,0,0,0)),
           axis.text.y = element_text(margin=margin(0,5,0,0)),
@@ -35,7 +35,7 @@ theme_boxplot <- function(base_size = 12){
 
 #############################
 # Experimental conditions
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/TempLight_HOBO_MesoExpt 2013.r")
+source(here::set_here("Exp_Conditions/TempLight_HOBO_MesoExpt_2013.r"))
 
 Temp_bar <- ggplot(data=Temp_raw, aes(x=Oiled, y=Temp_degC, color=Oiled)) + 
                    geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "a") + 
@@ -51,7 +51,7 @@ Light_bar <- ggplot(data=Temp_raw_Lday, aes(x=Oiled, y=Intensity_Lux, color=Oile
              scale_color_grey(start = 0.6, end = 0) +
              theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Exp_Conditions/Sulfides_MesoExpt 2013.r")
+source(here::here("Exp_Conditions/Sulfides_MesoExpt_2013.r"))
 
 Sulf_box <- ggplot(data=Sraw, aes(x=Chem1, y=Conc_ppm, color= Chem1)) + 
                    geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "d") + 
@@ -61,7 +61,7 @@ Sulf_box <- ggplot(data=Sraw, aes(x=Chem1, y=Conc_ppm, color= Chem1)) +
                    scale_color_grey(start = 0.8, end = 0) +
                    theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
 
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Oil/Oiling_FINAL Data_MesoExpt2013.r")
+source(here::here("Oil/Oiling_FINAL Data_MesoExpt2013.r"))
 
 TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=log_Tot_Hydrocarbon, fill=Chem1)) + 
                  geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "b") +  
@@ -76,7 +76,7 @@ grid.arrange(Temp_bar, TtlHydro, Light_bar, Sulf_box, ncol=2, nrow=2)
 
 #############################
 # Expected Multi-Stress with biomass and abundances of stems and herbivores
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r")
+source(here::here("Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r"))
  
 ExpStrsCalc  # this displays the expected stressor effects
 
@@ -191,6 +191,114 @@ S
  
 grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
+
+#####
+# New visuals for stressor effects following 5 editorial journal rejections (7/2/2019)
+
+exp_ul <- unlist(ExpStrsCalc)
+  
+exp_df <- as_tibble(as.list(exp_ul))
+
+exp_long <- exp_df %>% 
+            gather() %>% 
+            rename(response = key,
+                   expected_stress = value) %>% 
+            mutate(Herbivore = substring(response, regexpr("_", response) + 1))
+
+
+exp_df <- AllD %>% 
+          select(Treat, Herbivore, Chem1, LiveStemDryWgt_g, DeadStemDryWgt_g, TtlStemNum, LvRootDryWgt_Scaled,
+                 DdRootDryWgt, ProkAbunScaled, SnailWgtScaled) %>% 
+          group_by(Treat, Herbivore) %>% 
+          summarise_at(c("LiveStemDryWgt_g", "DeadStemDryWgt_g", "TtlStemNum", "LvRootDryWgt_Scaled",
+                 "DdRootDryWgt", "ProkAbunScaled", "SnailWgtScaled"), mean, na.rm = TRUE) %>% 
+          ungroup() %>%
+          gather(key, val, LiveStemDryWgt_g:SnailWgtScaled) %>% 
+          mutate(var_resp = ifelse(key == "LiveStemDryWgt_g", "LIVE",
+                            ifelse(key == "DeadStemDryWgt_g", "DEAD",
+                            ifelse(key =="TtlStemNum", "NUM",
+                            ifelse(key == "LvRootDryWgt_Scaled", "LIVR",
+                            ifelse(key == "DdRootDryWgt", "DEDR",
+                            ifelse(key == "ProkAbunScaled", "PROK",
+                            ifelse(key == "SnailWgtScaled", "SNAL", key))))))),
+                 response = paste0(var_resp, "_", Herbivore)
+                 ) %>% 
+          full_join(exp_long, by = c("response", "Herbivore")) %>% 
+          filter(!(Treat %in% c("E", "F", "G", "H", "I", "J", "K", "L"))) %>% 
+          mutate(ms_effect = ifelse(response %in% c("LIVE_P", "LIVR_P"), "additive", 
+                             ifelse(response %in% c("LIVE_SP", "LIVE_S", "LIVE_NG", "LIVR_NG",
+                                                    "LIVR_S", "NUM_S", "PROK_P", "PROK_SP"), "antagonistic",
+                             ifelse(response %in% c("NUM_SP", "LIVR_SP", "NUM_P", "NUM_NG",
+                                                    "SNAL_SP", "SNAL_S"), "synergistic", NA_character_)))
+                 )
+
+
+exp_df2 <- exp_df %>% 
+           filter(Treat %in% c("M", "N", "O", "P")) %>% 
+           select(-key, -expected_stress, -Treat) %>% 
+           rename(control = val)
+
+exp_df3 <- exp_df %>% 
+           filter(Treat %in% c("A", "B", "C", "D")) %>% 
+           rename(two_chem = val) %>% 
+           full_join(exp_df2) %>% 
+           mutate(expected_stress = case_when(var_resp == "PROK" & !(is.na(expected_stress)) ~ 0,
+                                              TRUE ~ expected_stress),
+                  std_two_chem = two_chem/control,
+                  std_exp_stress = expected_stress/control) %>% 
+           filter(!(var_resp %in% c("DEAD", "DEDR")))
+
+
+exp1 <- ggplot(data = exp_df3, aes(x = std_exp_stress, y = std_two_chem)) + 
+               geom_point(data = . %>% filter(!(var_resp %in% c("SNAL"))), size = 4, 
+                          aes(fill = ms_effect, shape = var_resp)) + 
+               geom_abline(intercept = 0, slope = 1) + xlim(0, 1.5) + ylim(0, 1.5) + 
+               theme_classic() + xlab("") + labs(title= "a") +
+               ylab("Observed multi-stress effect") + 
+               scale_shape_manual(breaks = c("LIVE", "LIVR", "NUM", "PROK"),
+                                  labels = c("Live Shoots", "Live Roots", "Stem Number", "Insect Number"),
+                                  values = c(21, 22, 23, 24)) +
+               scale_fill_manual(breaks = c("additive", "synergistic", "antagonistic"),
+                                 values = c("grey40", "black", "grey90")) +
+               guides(fill = guide_legend(override.aes=list(shape = 21))) +
+               theme(axis.text = element_text(size=13),
+                     axis.title = element_text(size=15),
+                     legend.title = element_blank(),
+                     legend.position = c(0.9, 0.35),
+                     legend.spacing.y = unit(-0.2, "cm"),
+                     legend.text=element_text(size=11))
+
+
+
+
+exp2 <- ggplot(data = exp_df3) + 
+               geom_point(data = . %>% filter(var_resp %in% c("SNAL")), size = 4, 
+                          aes(x = std_exp_stress, y = std_two_chem, shape = var_resp, fill = ms_effect)) + 
+               scale_shape_manual(breaks = c("SNAL"),
+                                  labels = c("Change in snail mass (g)"),
+                                  values = 25) +
+               scale_fill_manual(breaks = c("synergistic"),
+                                 values = c("grey90")) +
+               geom_abline(slope = 1) + xlim(0, 8) + ylim(-14, 1.5) + labs(title= "b") +
+               theme_classic() + xlab("Expected multi-stress effect (additive)") + 
+               ylab("Observed multi-stress effect") +
+               guides(fill = guide_legend(override.aes=list(shape = 21))) +
+               theme(axis.text = element_text(size=13),
+                     axis.title = element_text(size=15),
+                     legend.title = element_blank(),
+                     legend.position = c(0.85, 0.5),
+                     legend.spacing.y = unit(-0.2, "cm"),
+                     legend.text=element_text(size=11))
+       
+
+
+grid.arrange(exp1, exp2, ncol=1, nrow=2)
+
+
+
+##############
+
+
 ##############################
 # Plant Physiology
 source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
