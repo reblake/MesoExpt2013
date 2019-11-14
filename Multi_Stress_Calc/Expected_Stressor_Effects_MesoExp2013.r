@@ -22,7 +22,7 @@ treatment_subset <- function(Herb_level, resp_var) {
                     sub_2 <- sub_df %>%
                              select(-Bucket) %>%
                              summarise_each(funs(mean(., na.rm = TRUE))) %>%
-                             rename(corexit=Core, control=NC, oil=Oil, oilcore=OilCore)
+                             dplyr::rename(corexit=Core, control=NC, oil=Oil, oilcore=OilCore)
 
                     return(sub_2)
 }

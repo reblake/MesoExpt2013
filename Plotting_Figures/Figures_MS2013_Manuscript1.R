@@ -35,7 +35,8 @@ theme_boxplot <- function(base_size = 12){
 
 #############################
 # Experimental conditions
-source(here::set_here("Exp_Conditions/TempLight_HOBO_MesoExpt_2013.r"))
+#set_here("D:/Documents/LSU/MesoExp_2013/Analysis")
+source(here::here("Exp_Conditions/TempLight_HOBO_MesoExpt_2013.r"))
 
 Temp_bar <- ggplot(data=Temp_raw, aes(x=Oiled, y=Temp_degC, color=Oiled)) + 
                    geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "a") + 

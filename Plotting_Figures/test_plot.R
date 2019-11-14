@@ -1,4 +1,4 @@
-library(purrr) ; library(tidyverse)
+library(purrr) ; library(tidyverse) ; library(ggforce) ; library(gridExtra)
 
 
 ExpStrsCalc  # list of values
@@ -11,7 +11,7 @@ exp_df <- as_tibble(as.list(exp_ul))
 
 exp_long <- exp_df %>% 
             gather() %>% 
-            rename(response = key,
+            dplyr::rename(response = key,
                    expected_stress = value) %>% 
             mutate(Herbivore = substring(response, regexpr("_", response) + 1))
 
@@ -67,8 +67,8 @@ dot_df <- AllD %>%
                  response = paste0(var_resp, "_", Herbivore)
                  ) %>% 
           full_join(exp_long, by = c("response", "Herbivore")) %>% 
-          full_join(exp_df2) %>% 
-          rename(two_chem = val) %>%
+          full_join(exp_df2) %>%  # defined below
+          dplyr::rename(two_chem = val) %>%
           mutate(expected_stress = case_when(var_resp == "PROK" & !(is.na(expected_stress)) ~ 0,
                                              TRUE ~ expected_stress),
                  std_two_chem = two_chem/control,
@@ -122,37 +122,43 @@ exp_df <- AllD %>%
 exp_df2 <- exp_df %>% 
            filter(Treat %in% c("M", "N", "O", "P")) %>% 
            select(-key, -expected_stress, -Treat) %>% 
-           rename(control = val)
+           dplyr::rename(control = val)
 
 exp_df3 <- exp_df %>% 
            filter(Treat %in% c("A", "B", "C", "D")) %>% 
-           rename(two_chem = val) %>% 
+           dplyr::rename(two_chem = val) %>% 
            full_join(exp_df2) %>% 
            mutate(expected_stress = case_when(var_resp == "PROK" & !(is.na(expected_stress)) ~ 0,
                                               TRUE ~ expected_stress),
                   std_two_chem = two_chem/control,
-                  std_exp_stress = expected_stress/control) %>% 
+                  std_exp_stress = expected_stress/control,
+                  mask = ifelse(response %in% c("SNAL_SP", "SNAL_S"), 1, 0)) %>% 
            filter(!(var_resp %in% c("DEAD", "DEDR")))
 
+
+##################
 
 exp1 <- ggplot(data = exp_df3, aes(x = std_exp_stress, y = std_two_chem)) + 
                geom_point(data = . %>% filter(!(var_resp %in% c("SNAL"))), size = 4, 
                           aes(fill = ms_effect, shape = var_resp)) + 
                geom_abline(intercept = 0, slope = 1) + xlim(0, 1.5) + ylim(0, 1.5) + 
-               theme_classic() + xlab("") + labs(title= "a.") +
-               ylab("Observed multi-stress effect") + 
-               scale_shape_manual(breaks = c("LIVE", "LIVR", "NUM", "PROK"),
-                                  labels = c("Live Shoots", "Live Roots", "Stem Number", "Insect Number"),
-                                  values = c(21, 22, 23, 24)) +
+               theme_bw() + xlab("") + labs(title= "b.") +
+               xlab("Expected multi-stress effect (additive)") + 
+               ylab("") + 
+               scale_shape_manual(breaks = c("LIVE", "LIVR", "NUM", "PROK", "SNAL"),
+                                  labels = c("Live Shoots", "Live Roots", "Stem Number", 
+                                             "Insect Number", "Change in snail mass (g)"),
+                                  values = c(21, 22, 23, 24, 25), guide = FALSE) +
                scale_fill_manual(breaks = c("additive", "synergistic", "antagonistic"),
-                                 values = c("grey40", "black", "grey90")) +
-               guides(fill = guide_legend(override.aes=list(shape = 21))) +
+                                 values = c("grey40", "black", "grey90"), guide = FALSE) +
+             #  guides(fill = guide_legend(override.aes=list(shape = 21)), guide = FALSE) +
                theme(axis.text = element_text(size=13),
                      axis.title = element_text(size=15),
                      legend.title = element_blank(),
                      legend.position = c(0.9, 0.35),
                      legend.spacing.y = unit(-0.2, "cm"),
-                     legend.text=element_text(size=11))
+                     legend.text=element_text(size=11),
+                     panel.grid = element_blank())
 
 
 
@@ -162,25 +168,59 @@ exp2 <- ggplot(data = exp_df3) +
                           aes(x = std_exp_stress, y = std_two_chem, shape = var_resp, fill = ms_effect)) + 
                scale_shape_manual(breaks = c("SNAL"),
                                   labels = c("Change in snail mass (g)"),
-                                  values = 25) +
-               scale_fill_manual(breaks = c("synergistic"),
-                                 values = c("grey90")) +
+                                  values = 25, guide = FALSE) +
+                scale_fill_manual(breaks = c("synergistic"),
+                                  values = c("grey90"), guide = FALSE) +
                geom_abline(slope = 1) + xlim(0, 8) + ylim(-14, 1.5) + labs(title= "b.") +
-               theme_classic() + xlab("Expected multi-stress effect (additive)") + 
+               theme_bw() + xlab("Expected multi-stress effect (additive)") + 
                ylab("Observed multi-stress effect") +
+               # guides(fill = guide_legend(override.aes=list(shape = 21))) +
+               theme(axis.text = element_text(size=13),
+                     axis.title = element_text(size=15),
+                     legend.position = "none"#,
+                     # legend.title = element_blank(),
+                     # legend.position = c(0.85, 0.5),
+                     # legend.spacing.y = unit(-0.2, "cm"),
+                     # legend.text=element_text(size=11)
+                     )
+       
+
+exp3 <- ggplot(data = exp_df3) + 
+               geom_point(size = 4, 
+                          aes(x = std_exp_stress, y = std_two_chem, shape = var_resp, fill = ms_effect)) + 
+               xlab("Expected multi-stress effect (additive)") + 
+               ylab("Observed multi-stress effect") + theme_bw() +
+               scale_shape_manual(breaks = c("LIVE", "LIVR", "NUM", "PROK", "SNAL"),
+                                  labels = c("Live Shoots", "Live Roots", "Stem Number", 
+                                             "Insect Number", "Change in snail\nmass (g)"),
+                                  values = c(21, 22, 23, 24, 25)) +
+               scale_fill_manual(breaks = c("additive", "synergistic", "antagonistic"),
+                                 values = c("grey40", "black", "grey90")) +
+               geom_abline(slope = 1) + xlim(-1, 8) + ylim(-14, 2) + labs(title= "a.") +
+               annotate("segment", x=-0.7, y=-0.7, xend=2, yend=-0.7, color="black", 
+                        linetype="dashed", size=0.5) +
+               annotate("segment", x=2, y=-0.7, xend=2, yend=2, color="black", 
+                        linetype="dashed", size=0.5) +
+               annotate("segment", x=2, y=2, xend=-0.7, yend=2, color="black", 
+                        linetype="dashed", size=0.5) +
+               annotate("segment", x=-0.7, y=2, xend=-0.7, yend=-0.7, color="black", 
+                        linetype="dashed", size=0.5) +
                guides(fill = guide_legend(override.aes=list(shape = 21))) +
                theme(axis.text = element_text(size=13),
                      axis.title = element_text(size=15),
                      legend.title = element_blank(),
-                     legend.position = c(0.85, 0.5),
+                     legend.position = c(0.7, 0.65),
                      legend.spacing.y = unit(-0.2, "cm"),
-                     legend.text=element_text(size=11))
-       
+                     legend.text=element_text(size=11),
+                     panel.grid = element_blank()
+                     )
 
 
-grid.arrange(exp1, exp2, ncol=1, nrow=2)
+grid.arrange(exp3, exp1, ncol=2, nrow=1)
 
-#####
+
+#########
+
 
 
 
