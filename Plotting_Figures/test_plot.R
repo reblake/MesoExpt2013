@@ -1,4 +1,6 @@
-library(purrr) ; library(tidyverse) ; library(ggforce) ; library(gridExtra)
+library(purrr) ; library(tidyverse) ; library(ggforce) ; library
+
+source(here::here("Plotting_figures/Figures_MS2013_Manuscript1.R"))
 
 
 ExpStrsCalc  # list of values
@@ -139,7 +141,7 @@ exp_df3 <- exp_df %>%
 ##################
 
 exp1 <- ggplot(data = exp_df3, aes(x = std_exp_stress, y = std_two_chem)) + 
-               geom_point(data = . %>% filter(!(var_resp %in% c("SNAL"))), size = 4, 
+               geom_point(data = . %>% filter(!(var_resp %in% c("SNAL"))), size = 3, 
                           aes(fill = ms_effect, shape = var_resp)) + 
                geom_abline(intercept = 0, slope = 1) + xlim(0, 1.5) + ylim(0, 1.5) + 
                theme_bw() + xlab("") + labs(title= "b.") +
@@ -164,7 +166,7 @@ exp1 <- ggplot(data = exp_df3, aes(x = std_exp_stress, y = std_two_chem)) +
 
 
 exp2 <- ggplot(data = exp_df3) + 
-               geom_point(data = . %>% filter(var_resp %in% c("SNAL")), size = 4, 
+               geom_point(data = . %>% filter(var_resp %in% c("SNAL")), size = 3, 
                           aes(x = std_exp_stress, y = std_two_chem, shape = var_resp, fill = ms_effect)) + 
                scale_shape_manual(breaks = c("SNAL"),
                                   labels = c("Change in snail mass (g)"),
@@ -186,7 +188,7 @@ exp2 <- ggplot(data = exp_df3) +
        
 
 exp3 <- ggplot(data = exp_df3) + 
-               geom_point(size = 4, 
+               geom_point(size = 3, 
                           aes(x = std_exp_stress, y = std_two_chem, shape = var_resp, fill = ms_effect)) + 
                xlab("Expected multi-stress effect (additive)") + 
                ylab("Observed multi-stress effect") + theme_bw() +
@@ -221,7 +223,9 @@ grid.arrange(exp3, exp1, ncol=2, nrow=1)
 
 #########
 
-
+png("exp_stress_combo.png", width = 224, height = 117, units = 'mm', res = 300)
+grid.arrange(exp3, exp1, ncol=2, nrow=1) # Make plot
+dev.off()
 
 
 
