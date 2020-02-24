@@ -53,17 +53,16 @@ flowchar <- grViz("digraph {
                   I[label = 'Supp Fig 4: Isotopes']
                   J[label = 'Supp Fig 5: Stressor Effects']
                   
-                  node[fillcolor = PaleTurquoise1, margin = 0.2]
+                  node[fillcolor = CornflowerBlue, margin = 0.2]
                   K[label = 'Figures_MS2013_Manuscript1.R']
-                  L[label = 'test_plot.R']
                   M[label = 'SEM_All_MesoExpt 2013.r']
-                  N[label = 'SEM_Figs.pptx']
                   O[label = 'Mesocosm_Expt_2013_SIA Figs.Rmd']
+                  
+                  node[fillcolor = PaleTurquoise1, margin = 0.2]
+                  L[label = 'test_plot.R']
+                  N[label = 'SEM_Figs.pptx']
                   P[label = 'Experimental Design_MesoExpt2013.pptx']
                   Q[label = 'Google Calendar']
-                  R[label = '']
-                  S[label = '']
-                  
 
                   node[fillcolor = DarkSeaGreen1, margin = 0.2]
                   AA[label = 'Photosyn_MesoExpt 2013.r']
@@ -71,7 +70,7 @@ flowchar <- grViz("digraph {
                   CC[label = 'Sulfides_MesoExpt_2013.r']
                   DD[label = 'Oiling_FINAL Data_MesoExpt2013.r']
                   EE[label = 'Expected_Stressor_Effects_MesoExp2013.r']
-                  FF[label = '']
+
                   
                   
                   node[fillcolor = YellowGreen, margin = 0.2]
@@ -81,6 +80,10 @@ flowchar <- grViz("digraph {
                   OO[label = 'Sulfide_MesoExpt2013.csv']
                   PP[label = 'OilConc_FINAL_MesoExpt 2013.csv']
                   QQ[label = 'LICOR_PhotosynMeas_MesoExpt_2013.csv']
+                  
+                  node[fillcolor = invis, color = invis, margin = 0.2]
+                  YY[label = '']
+                  ZZ[label = '']
                   
 
                   edge[color = black, arrowhead = vee, arrowsize = 1.25]
@@ -102,20 +105,23 @@ flowchar <- grViz("digraph {
                   P -> E
                   Q -> F
                   LL -> M
-                  LL -> PP
+                  LL -> DD
                   LL -> EE
                   MM -> O
                   NN -> BB
                   OO -> CC
                   PP -> DD
+                  QQ -> AA
+                  AA -> A1
                   
                   
                   {rank = same; A1 -> A -> B -> C -> D -> E -> F -> G -> H -> I -> J [color=invis]}
-                  {rank = same; L  [color=invis]}
-                  {rank = same; N -> M -> K -> O [color=invis]}
+                  {rank = same; L -> ZZ [color=invis]}
+                  {rank = same; N -> P -> Q -> L [color=invis]}
+                  {rank = same; M -> K -> O [color=invis]}
                   {rank = same; AA -> EE -> DD -> CC -> BB [color=invis]}
                   {rank = same; PP -> OO -> MM -> NN  [color=invis]}
-                  {rank = same; LL [color=invis]}
+                  {rank = same; LL -> YY [color=invis]}
     
             }")
                   
