@@ -1,0 +1,7 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+Logger,ratio,numericDomain,number,real,NA,HOBO Logger number,NA,NA,NA,NA
+Date,dateTime,dateTimeDomain,NA,NA,NA,Date of measurement,NA,MDDYYYY,NA,NA
+Time,dateTime,dateTimeDomain,NA,NA,NA,Time of measurement,NA,HHMM,NA,NA
+Temp_degC ,ratio,numericDomain,celsius,real,NA,Air temperature,NA,NA,NA,NA
+Intensity_Lux ,ratio,numericDomain,Lux,real,NA,Light intensity measured in Lux,NA,NA,NA,NA
+Oiled,nominal,textDomain,NA,NA,NA,Oil treatment (Y/N),Y or N,NA,NA,NA

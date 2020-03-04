@@ -1,0 +1,10 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+SampleNum,ratio,numericDomain,number,whole,NA,Experimental bucket number,NA,NA,NA,NA
+Treat,nominal,textDomain,NA,NA,NA,experimental treatment,A:P,NA,NA,NA
+Chem,nominal,textDomain,NA,NA,NA,chemical treatment,chemical treatment,NA,NA,NA
+Oil,nominal,textDomain,NA,NA,NA,oil treatment,oil treatment,NA,NA,NA
+Corexit,nominal,textDomain,NA,NA,NA,dispersant treatment,dispersant treatment,NA,NA,NA
+Herbivore,nominal,textDomain,NA,NA,NA,herbivore treatment,herbivore treatment,NA,NA,NA
+mV,ratio,numericDomain,millivolt,real,NA,measured potential,NA,NA,NA,NA
+Conc_ppm,ratio,numericDomain,partspermillion,real,NA,concentration of sulfide,NA,NA,NA,NA
+S2-mM,ratio,numericDomain,millimole,real,NA,Sulfide in millimolar,NA,NA,NA,NA

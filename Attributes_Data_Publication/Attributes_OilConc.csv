@@ -1,0 +1,83 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+Field ID#:,ratio,numericDomain,number,real,NA,unique sample ID,date_bucket,NA,NA,NA
+Date,dateTime,dateTimeDomain,NA,NA,NA,Date of sample,NA,MM/DD/YYYY,NA,NA
+Time_Step,ratio,numericDomain,number,whole,NA,Time step,NA,NA,NA,NA
+Bucket,ratio,numericDomain,number,whole,NA,Experimental bucket,NA,NA,NA,NA
+Treat,nominal,textDomain,NA,NA,NA,Treatment,A:P,NA,NA,NA
+Chem,nominal,textDomain,NA,NA,NA,Chemical Treatment,any text,NA,NA,NA
+Oil,nominal,textDomain,NA,NA,NA,Oil Treatment,any text,NA,NA,NA
+Corexit,nominal,textDomain,NA,NA,NA,Dispersant Treatment,any text,NA,NA,NA
+Herbivore,nominal,textDomain,NA,NA,NA,Herbivore Treatment,any text,NA,NA,NA
+Total Alkanes,ratio,numericDomain,number,real,NA,Total Alkane compounds,NA,NA,NA,NA
+Total Aromatics,ratio,numericDomain,number,real,NA,Total Aromatic compounds,NA,NA,NA,NA
+nC-10 Decane,ratio,numericDomain,number,real,NA,nC-10 Decane,NA,NA,NA,NA
+nC-11 Undecane,ratio,numericDomain,number,real,NA,nC-11 Undecane,NA,NA,NA,NA
+nC-12 Dodecane,ratio,numericDomain,number,real,NA,nC-12 Dodecane,NA,NA,NA,NA
+nC-13 Tridecane,ratio,numericDomain,number,real,NA,nC-13 Tridecane,NA,NA,NA,NA
+nC-14 Tetradecane,ratio,numericDomain,number,real,NA,nC-14 Tetradecane,NA,NA,NA,NA
+nC-15 Pentadecane,ratio,numericDomain,number,real,NA,nC-15 Pentadecane,NA,NA,NA,NA
+nC-16 Hexadecane,ratio,numericDomain,number,real,NA,nC-16 Hexadecane,NA,NA,NA,NA
+nC-17 Heptadecane,ratio,numericDomain,number,real,NA,nC-17 Heptadecane,NA,NA,NA,NA
+Pristane,ratio,numericDomain,number,real,NA,Pristane,NA,NA,NA,NA
+nC-18 Octadecane,ratio,numericDomain,number,real,NA,nC-18 Octadecane,NA,NA,NA,NA
+Phytane,ratio,numericDomain,number,real,NA,Phytane,NA,NA,NA,NA
+nC-19 Nonadecane,ratio,numericDomain,number,real,NA,nC-19 Nonadecane,NA,NA,NA,NA
+nC-20 Eicosane,ratio,numericDomain,number,real,NA,nC-20 Eicosane,NA,NA,NA,NA
+nC-21 Heneicosane,ratio,numericDomain,number,real,NA,nC-21 Heneicosane,NA,NA,NA,NA
+nC-22 Docosane,ratio,numericDomain,number,real,NA,nC-22 Docosane,NA,NA,NA,NA
+nC-23 Tricosane,ratio,numericDomain,number,real,NA,nC-23 Tricosane,NA,NA,NA,NA
+nC-24 Tetracosane,ratio,numericDomain,number,real,NA,nC-24 Tetracosane,NA,NA,NA,NA
+nC-25 Pentacosane,ratio,numericDomain,number,real,NA,nC-25 Pentacosane,NA,NA,NA,NA
+nC-26 Hexacosane,ratio,numericDomain,number,real,NA,nC-26 Hexacosane,NA,NA,NA,NA
+nC-27 Heptacosane,ratio,numericDomain,number,real,NA,nC-27 Heptacosane,NA,NA,NA,NA
+nC-28 Octacosane,ratio,numericDomain,number,real,NA,nC-28 Octacosane,NA,NA,NA,NA
+nC-29 Nonacosane,ratio,numericDomain,number,real,NA,nC-29 Nonacosane,NA,NA,NA,NA
+nC-30 Triacontane,ratio,numericDomain,number,real,NA,nC-30 Triacontane,NA,NA,NA,NA
+nC-31 Hentriacontane,ratio,numericDomain,number,real,NA,nC-31 Hentriacontane,NA,NA,NA,NA
+nC-32 Dotriacontane,ratio,numericDomain,number,real,NA,nC-32 Dotriacontane,NA,NA,NA,NA
+nC-33 Tritriacontane,ratio,numericDomain,number,real,NA,nC-33 Tritriacontane,NA,NA,NA,NA
+nC-34 Tetratriacontane,ratio,numericDomain,number,real,NA,nC-34 Tetratriacontane,NA,NA,NA,NA
+nC-35 Pentatriacontane,ratio,numericDomain,number,real,NA,nC-35 Pentatriacontane,NA,NA,NA,NA
+Naphthalene,ratio,numericDomain,number,real,NA,Naphthalene,NA,NA,NA,NA
+C1-Naphthalenes,ratio,numericDomain,number,real,NA,C1-Naphthalenes,NA,NA,NA,NA
+C2-Naphthalenes,ratio,numericDomain,number,real,NA,C2-Naphthalenes,NA,NA,NA,NA
+C3-Naphthalenes,ratio,numericDomain,number,real,NA,C3-Naphthalenes,NA,NA,NA,NA
+C4-Naphthalenes,ratio,numericDomain,number,real,NA,C4-Naphthalenes,NA,NA,NA,NA
+Fluorene,ratio,numericDomain,number,real,NA,Fluorene,NA,NA,NA,NA
+C1-Fluorenes,ratio,numericDomain,number,real,NA,C1-Fluorenes,NA,NA,NA,NA
+C2-Fluorenes,ratio,numericDomain,number,real,NA,C2-Fluorenes,NA,NA,NA,NA
+C3- Fluorenes,ratio,numericDomain,number,real,NA,C3- Fluorenes,NA,NA,NA,NA
+Dibenzothiophene,ratio,numericDomain,number,real,NA,Dibenzothiophene,NA,NA,NA,NA
+C1-Dibenzothiophenes,ratio,numericDomain,number,real,NA,C1-Dibenzothiophenes,NA,NA,NA,NA
+C2-Dibenzothiophenes,ratio,numericDomain,number,real,NA,C2-Dibenzothiophenes,NA,NA,NA,NA
+C3- Dibenzothiophenes,ratio,numericDomain,number,real,NA,C3- Dibenzothiophenes,NA,NA,NA,NA
+Phenanthrene,ratio,numericDomain,number,real,NA,Phenanthrene,NA,NA,NA,NA
+C1-Phenanthrenes,ratio,numericDomain,number,real,NA,C1-Phenanthrenes,NA,NA,NA,NA
+C2-Phenanthrenes,ratio,numericDomain,number,real,NA,C2-Phenanthrenes,NA,NA,NA,NA
+C3-Phenanthrenes,ratio,numericDomain,number,real,NA,C3-Phenanthrenes,NA,NA,NA,NA
+C4-Phenanthrenes,ratio,numericDomain,number,real,NA,C4-Phenanthrenes,NA,NA,NA,NA
+Anthracene,ratio,numericDomain,number,real,NA,Anthracene,NA,NA,NA,NA
+Fluoranthene,ratio,numericDomain,number,real,NA,Fluoranthene,NA,NA,NA,NA
+Pyrene,ratio,numericDomain,number,real,NA,Pyrene,NA,NA,NA,NA
+C1- Pyrenes,ratio,numericDomain,number,real,NA,C1- Pyrenes,NA,NA,NA,NA
+C2- Pyrenes,ratio,numericDomain,number,real,NA,C2- Pyrenes,NA,NA,NA,NA
+C3- Pyrenes,ratio,numericDomain,number,real,NA,C3- Pyrenes,NA,NA,NA,NA
+C4- Pyrenes,ratio,numericDomain,number,real,NA,C4- Pyrenes,NA,NA,NA,NA
+Naphthobenzothiophene,ratio,numericDomain,number,real,NA,Naphthobenzothiophene,NA,NA,NA,NA
+C-1 Naphthobenzothiophenes,ratio,numericDomain,number,real,NA,C-1 Naphthobenzothiophenes,NA,NA,NA,NA
+C-2 Naphthobenzothiophenes,ratio,numericDomain,number,real,NA,C-2 Naphthobenzothiophenes,NA,NA,NA,NA
+C-3 Naphthobenzothiophenes,ratio,numericDomain,number,real,NA,C-3 Naphthobenzothiophenes,NA,NA,NA,NA
+Benzo (a) Anthracene,ratio,numericDomain,number,real,NA,Benzo (a) Anthracene,NA,NA,NA,NA
+Chrysene,ratio,numericDomain,number,real,NA,Chrysene,NA,NA,NA,NA
+C1- Chrysenes,ratio,numericDomain,number,real,NA,C1- Chrysenes,NA,NA,NA,NA
+C2- Chrysenes,ratio,numericDomain,number,real,NA,C2- Chrysenes,NA,NA,NA,NA
+C3- Chrysenes,ratio,numericDomain,number,real,NA,C3- Chrysenes,NA,NA,NA,NA
+C4- Chrysenes,ratio,numericDomain,number,real,NA,C4- Chrysenes,NA,NA,NA,NA
+Benzo (b) Fluoranthene,ratio,numericDomain,number,real,NA,Benzo (b) Fluoranthene,NA,NA,NA,NA
+Benzo (k) Fluoranthene,ratio,numericDomain,number,real,NA,Benzo (k) Fluoranthene,NA,NA,NA,NA
+Benzo (e) Pyrene,ratio,numericDomain,number,real,NA,Benzo (e) Pyrene,NA,NA,NA,NA
+Benzo (a) Pyrene,ratio,numericDomain,number,real,NA,Benzo (a) Pyrene,NA,NA,NA,NA
+Perylene,ratio,numericDomain,number,real,NA,Perylene,NA,NA,NA,NA
+"Indeno (1,2,3 - cd) Pyrene",ratio,numericDomain,number,real,NA,"Indeno (1,2,3 - cd) Pyrene",NA,NA,NA,NA
+"Dibenzo (a,h) anthracene",ratio,numericDomain,number,real,NA,"Dibenzo (a,h) anthracene",NA,NA,NA,NA
+"Benzo (g,h,i) perylene",ratio,numericDomain,number,real,NA,"Benzo (g,h,i) perylene",NA,NA,NA,NA

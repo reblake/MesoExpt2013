@@ -1,0 +1,93 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+Date,dateTime,dateTimeDomain,NA,NA,NA,date sample was taken,NA,DD-Month,NA,NA
+MeasType,nominal,textDomain,NA,NA,NA,type of measurement taken (light or dark); from LICOR 6400XT,light or dark,NA,NA,NA
+HHMMSS,dateTime,dateTimeDomain,NA,NA,NA,"real clock time string, 24 hour; from LICOR 6400XT",NA,HHMMSS,NA,NA
+Bucket Number,ratio,numericDomain,number,real,NA,number of experimental unit,NA,NA,NA,NA
+Treatment,nominal,textDomain,NA,NA,NA,code designating an experimental treatment,A:P,NA,NA,NA
+Chem,nominal,textDomain,NA,NA,NA,code designating experimental chemical treatment,any text,NA,NA,NA
+Oil,nominal,textDomain,NA,NA,NA,code designating oil treatment,any text,NA,NA,NA
+Corexit,nominal,textDomain,NA,NA,NA,code designating dispersant treatment,any text,NA,NA,NA
+Herbivore,nominal,textDomain,NA,NA,NA,code designating herbivore treatment,any text,NA,NA,NA
+FTime,ratio,numericDomain,second,real,NA,number of seconds since the file was opened; from LICOR 6400XT,NA,NA,NA,NA
+EBal?,ratio,numericDomain,dimensionless,real,NA,flag for whether to do energy balance; from LICOR 6400XT,NA,NA,NA,NA
+Photo,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,Photosynthesis (micromol/m2/s); from LICOR 6400XT,NA,NA,NA,NA
+Cond,ratio,numericDomain,molePerMeterSquaredPerSecond,real,NA,stomatal conductance (mol/m2/s); from LICOR 6400XT,NA,NA,NA,NA
+Ci,ratio,numericDomain,dimensionless,real,NA,(micromol CO2 mol air-1); from LICOR 6400XT,NA,NA,NA,NA
+FCnt,ratio,numericDomain,number,real,NA,Number of saturating flashes since power on; from LICOR 6400XT,NA,NA,NA,NA
+DCnt,ratio,numericDomain,number,real,NA,Dark pulse count; from LICOR 6400XT,NA,NA,NA,NA
+Fo,ratio,numericDomain,dimensionless,real,NA,"Minimal Fluorescence, dark adapted; from LICOR 6400XT",NA,NA,NA,NA
+Fm,ratio,numericDomain,dimensionless,real,NA,"Maximum Fluorescence, dark adapted; from LICOR 6400XT",NA,NA,NA,NA
+Fo',ratio,numericDomain,dimensionless,real,NA,"Minimal Fluorescence, light adapted; from LICOR 6400XT",NA,NA,NA,NA
+Fm',ratio,numericDomain,dimensionless,real,NA,"Maximum Fluorescence, light adapted; from LICOR 6400XT",NA,NA,NA,NA
+Fs,ratio,numericDomain,dimensionless,real,NA,Steady state fluorescence; from LICOR 6400XT,NA,NA,NA,NA
+Fv/Fm,ratio,numericDomain,number,real,NA,"Maximum PhotoSystem II efficiency. Variable to maximal fluorescence
+(dark).; from LICOR 6400XT",NA,NA,NA,NA
+Fv'/Fm',ratio,numericDomain,dimensionless,real,NA,Variable to maximal fluorescence (light); from LICOR 6400XT,NA,NA,NA,NA
+PhiPS2,ratio,numericDomain,dimensionless,real,NA,PhotoSystem II efficiency; from LICOR 6400XT,NA,NA,NA,NA
+Adark,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,"Dark photosynthetic rate (micromol CO2 m-2 s-1), Sign convention:
+a value < 0 indicates respiration; from LICOR 6400XT",NA,NA,NA,NA
+RedAbs,ratio,numericDomain,dimensionless,real,NA,Leaf absorptance at 640 nm; from LICOR 6400XT,NA,NA,NA,NA
+BlueAbs,ratio,numericDomain,dimensionless,real,NA,Leaf absorptance at 460 nm; from LICOR 6400XT,NA,NA,NA,NA
+%Blue,ratio,numericDomain,dimensionless,real,NA,Blue fraction; from LICOR 6400XT,NA,NA,NA,NA
+LeafAbs,ratio,numericDomain,dimensionless,real,NA,Leaf Absorptance computed based on the fraction of blue light and blue and red absorptances entered by user; from LICOR 6400XT,NA,NA,NA,NA
+PhiCO2,ratio,numericDomain,dimensionless,real,NA,quantum yield calculated from CO2 assimilation; from LICOR 6400XT,NA,NA,NA,NA
+qP,ratio,numericDomain,dimensionless,real,NA,Photochemical quenching; from LICOR 6400XT,NA,NA,NA,NA
+qN,ratio,numericDomain,dimensionless,real,NA,Non-photochemical quenching; from LICOR 6400XT,NA,NA,NA,NA
+NPQ,ratio,numericDomain,dimensionless,real,NA,Alternative non-photochemical quenching; from LICOR 6400XT,NA,NA,NA,NA
+ParIn@Fs,ratio,numericDomain,dimensionless,real,NA,Photosynthetically Active Radiation when Fs last set; from LICOR 6400XT,NA,NA,NA,NA
+PS2/1,ratio,numericDomain,dimensionless,real,NA,Photosystem distribution factor; from LICOR 6400XT,NA,NA,NA,NA
+ETR,ratio,numericDomain,dimensionless,real,NA,Electron transport rate; from LICOR 6400XT,NA,NA,NA,NA
+Trmmol,ratio,numericDomain,millimolePerMeterSquarePerSecond,real,NA,Transpiration rate (mmol H2O m-2 s-1); from LICOR 6400XT,NA,NA,NA,NA
+VpdL,ratio,numericDomain,kilopascal,real,NA,Vapor pressure deficit based on Leaf temp (kPa); from LICOR 6400XT,NA,NA,NA,NA
+CTleaf,ratio,numericDomain,celsius,real,NA,computed leaf temperature degrees C; from LICOR 6400XT,NA,NA,NA,NA
+Area,ratio,numericDomain,squareCentimeters,real,NA,In-chamber leaf area cm-2; from LICOR 6400XT,NA,NA,NA,NA
+BLC_1,ratio,numericDomain,dimensionless,real,NA,One sided Boundary Layer Conductance; from LICOR 6400XT,NA,NA,NA,NA
+StmRat,ratio,numericDomain,dimensionless,real,NA,Stomatal ratio estimated; from LICOR 6400XT,NA,NA,NA,NA
+BLCond,ratio,numericDomain,dimensionless,real,NA,Effective Boundary Layer Conductance; from LICOR 6400XT,NA,NA,NA,NA
+Tair,ratio,numericDomain,celsius,real,NA,Chamber air temperature degrees C; from LICOR 6400XT,NA,NA,NA,NA
+Tleaf,ratio,numericDomain,celsius,real,NA,Leaf temperature measured with thermocouple in degrees C; from LICOR 6400XT,NA,NA,NA,NA
+TBlk,ratio,numericDomain,celsius,real,NA,Infrared Gas Analyzer block temperature in degrees C; from LICOR 6400XT,NA,NA,NA,NA
+CO2R,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,Reference cell CO2 (micromol CO2 mol-1); from LICOR 6400XT,NA,NA,NA,NA
+CO2S,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,Sample cell CO2 (micromol CO2 mol-1); from LICOR 6400XT,NA,NA,NA,NA
+H2OR,ratio,numericDomain,millimolePerMeterSquarePerSecond,real,NA,Reference cell H2O (mmol H2O mol-1); from LICOR 6400XT,NA,NA,NA,NA
+H2OS,ratio,numericDomain,millimolePerMeterSquarePerSecond,real,NA,Sample cell H2O (mmol H2O mol-1); from LICOR 6400XT,NA,NA,NA,NA
+RH_R,ratio,numericDomain,dimensionless,real,NA,Relative humidity in the reference cell (%); from LICOR 6400XT,NA,NA,NA,NA
+RH_S,ratio,numericDomain,dimensionless,real,NA,Relative humidity in the sample cell (%); from LICOR 6400XT,NA,NA,NA,NA
+Flow,ratio,numericDomain,dimensionless,real,NA,flow control status; from LICOR 6400XT,NA,NA,NA,NA
+PARi,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,In-chamber PAR micromol m-2 s-1; from LICOR 6400XT,NA,NA,NA,NA
+PARo,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,External PAR micromol m-2 s-1; from LICOR 6400XT,NA,NA,NA,NA
+Press,ratio,numericDomain,kilopascal,real,NA,Atmospheric Pressure kPa; from LICOR 6400XT,NA,NA,NA,NA
+CsMch,ratio,numericDomain,micromolePerMeterSquaredPerSecond,real,NA,Sample CO2 offset micromol mol-1; from LICOR 6400XT,NA,NA,NA,NA
+HsMch,ratio,numericDomain,millimolePerMeterSquarePerSecond,real,NA,Sample H2O offset mmol mol-1; from LICOR 6400XT,NA,NA,NA,NA
+StableF,ratio,numericDomain,dimensionless,real,NA,"Stable/Total as fraction, from stability indicators; from LICOR 6400XT",NA,NA,NA,NA
+BLCslope,ratio,numericDomain,dimensionless,real,NA,slope as function of area; from LICOR 6400XT,NA,NA,NA,NA
+BLCoffst,ratio,numericDomain,dimensionless,real,NA,offset as function of area; from LICOR 6400XT,NA,NA,NA,NA
+f_parin,ratio,numericDomain,dimensionless,real,NA,Fraction of ParIn_microm to use for Energy Balance; from LICOR 6400XT,NA,NA,NA,NA
+f_parout,ratio,numericDomain,dimensionless,real,NA,Fraction of ParOut_microm to use for Energy Balance; from LICOR 6400XT,NA,NA,NA,NA
+alphaK,ratio,numericDomain,dimensionless,real,NA,Used in the conversion of micromol mol-1 to W m-2; from LICOR 6400XT,NA,NA,NA,NA
+Status,ratio,numericDomain,number,real,NA,Program status; from LICOR 6400XT,NA,NA,NA,NA
+fda,ratio,numericDomain,dimensionless,real,NA,flow/area with units conversion; from LICOR 6400XT,NA,NA,NA,NA
+Trans,ratio,numericDomain,molePerMeterSquaredPerSecond,real,NA,Transpiration (mol/m2/s); from LICOR 6400XT,NA,NA,NA,NA
+Tair_K,ratio,numericDomain,kelvin,real,NA,Air temperature in K; from LICOR 6400XT,NA,NA,NA,NA
+Twall_K,ratio,numericDomain,kelvin,real,NA,Twall temperature in K; from LICOR 6400XT,NA,NA,NA,NA
+R(W/m2),ratio,numericDomain,wattPerMeterSquared,real,NA,incoming radiation; from LICOR 6400XT,NA,NA,NA,NA
+Tl-Ta,ratio,numericDomain,dimensionless,real,NA,energy balance delta t; from LICOR 6400XT,NA,NA,NA,NA
+SVTleaf,ratio,numericDomain,dimensionless,real,NA,SatVap(Tleaf); from LICOR 6400XT,NA,NA,NA,NA
+h2o_i,ratio,numericDomain,dimensionless,real,NA,Intercellular h2o; from LICOR 6400XT,NA,NA,NA,NA
+h20diff,ratio,numericDomain,millimolePerMole,real,NA,chamber - reference H2O mmol/mol; from LICOR 6400XT,NA,NA,NA,NA
+CTair,ratio,numericDomain,celsius,real,NA,computed chamber air temperature degrees C; from LICOR 6400XT,NA,NA,NA,NA
+SVTair,ratio,numericDomain,dimensionless,real,NA,SatVap(Tair); from LICOR 6400XT,NA,NA,NA,NA
+CndTotal,ratio,numericDomain,dimensionless,real,NA,total conductance; from LICOR 6400XT,NA,NA,NA,NA
+vp_kPa,ratio,numericDomain,kilopascal,real,NA,vapor pressure chamber air (kPa); from LICOR 6400XT,NA,NA,NA,NA
+VpdA,ratio,numericDomain,dimensionless,real,NA,Air VPD (SatVap(Tair) - eair); from LICOR 6400XT,NA,NA,NA,NA
+CndCO2,ratio,numericDomain,dimensionless,real,NA,Total conductance to CO2; from LICOR 6400XT,NA,NA,NA,NA
+Ci_Pa,ratio,numericDomain,pascal,real,NA,Intercellular CO2 (Pa); from LICOR 6400XT,NA,NA,NA,NA
+Ci/Ca,ratio,numericDomain,dimensionless,real,NA,Intercellular CO2/Ambient CO2; from LICOR 6400XT,NA,NA,NA,NA
+RHsfc,ratio,numericDomain,dimensionless,real,NA,Surface Humidity (%); from LICOR 6400XT,NA,NA,NA,NA
+C2sfc,ratio,numericDomain,micromolePerMeter,real,NA,Surface CO2 (micromol/mol); from LICOR 6400XT,NA,NA,NA,NA
+AHs/Cs,ratio,numericDomain,dimensionless,real,NA,Bell-Berry parameter; from LICOR 6400XT,NA,NA,NA,NA
+Fv,ratio,numericDomain,dimensionless,real,NA,variable fluorescence; from LICOR 6400XT,NA,NA,NA,NA
+PARabs,ratio,numericDomain,dimensionless,real,NA,Absorbed PAR (ParIn_microm * LeafAbs); from LICOR 6400XT,NA,NA,NA,NA
+Fv',ratio,numericDomain,dimensionless,real,NA,variable fluorescence (light); from LICOR 6400XT,NA,NA,NA,NA
+qP_Fo,ratio,numericDomain,dimensionless,real,NA,(Fm'-Fs)/(Fm'-Fo); from LICOR 6400XT,NA,NA,NA,NA
+qN_Fo,ratio,numericDomain,dimensionless,real,NA,(Fm-Fm')/(Fm-Fo); from LICOR 6400XT,NA,NA,NA,NA

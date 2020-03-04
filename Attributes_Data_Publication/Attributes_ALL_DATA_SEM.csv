@@ -1,0 +1,41 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+Week,ratio,numericDomain,number,whole,NA,week of the experiment,NA,NA,NA,NA
+Bucket,ratio,numericDomain,number,whole,NA,number of the mesocosm,NA,NA,NA,NA
+Treat,nominal,textDomain,NA,NA,NA,treatment,Letters (A:P) identifying experimental treatment,NA,NA,NA
+Chem,nominal,textDomain,NA,NA,NA,chemical treatment,"Oil, NC, OilCore, Core",NA,NA,NA
+Oil,ratio,numericDomain,number,whole,NA,oil treatment,NA,NA,NA,NA
+Corexit,ratio,numericDomain,number,whole,NA,dispersant treatment,NA,NA,NA,NA
+Herbivore,nominal,textDomain,NA,NA,NA,herbivore treatment,"S, P, SP, NG",NA,NA,NA
+Snail,ratio,numericDomain,number,whole,NA,snail treatment,NA,NA,NA,NA
+Insect,ratio,numericDomain,number,whole,NA,insect treatment,NA,NA,NA,NA
+TtlStemNum,ratio,numericDomain,number,integer,NA,Spartina total stem number,NA,NA,NA,NA
+StemHgt_cm,ratio,numericDomain,centimeter,integer,NA,Spartina stem height  in cm,NA,NA,NA,NA
+StemDiam_mm,ratio,numericDomain,millimeter,integer,NA,Spartina stem diameter in mm,NA,NA,NA,NA
+LiveStemDryWgt_g,ratio,numericDomain,gram,integer,NA,Spartina live stem dry weight in g,NA,NA,NA,NA
+DeadStemDryWgt_g,ratio,numericDomain,gram,integer,NA,Spartina dead stem dry weight in g,NA,NA,NA,NA
+BitsStemDryWgt_g,ratio,numericDomain,gram,integer,NA,Spartina bits of stems dry weight in g,NA,NA,NA,NA
+OutStemDryWgt_g,ratio,numericDomain,gram,integer,NA,Spartina stems growing outside flower pot dry weight in g,NA,NA,NA,NA
+TtlStemDryWgt_g,ratio,numericDomain,gram,integer,NA,Spartina total stem dry weight in g,NA,NA,NA,NA
+SnailWgt_per_Day,ratio,numericDomain,gram,integer,NA,change in snail weight per day in g,NA,NA,NA,NA
+Prok_Abun,ratio,numericDomain,number,integer,NA,abundance of Prokelisia assemblage,NA,NA,NA,NA
+ProkAbunScaled,ratio,numericDomain,number,integer,NA,abundance of Prokelisia assemblage scaled,NA,NA,NA,NA
+LogProkAbunScaled,ratio,numericDomain,number,integer,NA,log of abundance of Prokelisia assemblage scaled,NA,NA,NA,NA
+SqrtProkAbunScaled,ratio,numericDomain,number,integer,NA,square roof of abundance of Prokelisia assemblage scaled,NA,NA,NA,NA
+LogDeadStemDryWgt,ratio,numericDomain,gram,integer,NA,log of dead Spartina stem dry weight in g,NA,NA,NA,NA
+LiveStemDryScaled,ratio,numericDomain,gram,integer,NA,Spartina live stem dry weight scaled in g,NA,NA,NA,NA
+TtlStemNumScaled,ratio,numericDomain,number,integer,NA,Spartina total number of stems (TtlStemNum) scaled,NA,NA,NA,NA
+SnailWgtScaled,ratio,numericDomain,gram,integer,NA,scaled weight of SnailWgt_per_Day in g,NA,NA,NA,NA
+Photo,ratio,numericDomain,number,integer,NA,Photosynthesis as measued by LICOR 6400XT,NA,NA,NA,NA
+qN,ratio,numericDomain,number,integer,NA,non-photochemical quenching as measured by LICOR 6400XT,NA,NA,NA,NA
+Fv.Fm,ratio,numericDomain,number,integer,NA,"Fv/Fm, maximum efficiency of photosystem II as measued by LICOR 6400XT",NA,NA,NA,NA
+Photo_Scaled,ratio,numericDomain,number,integer,NA,photosynthesis scaled,NA,NA,NA,NA
+Fv.Fm_Scaled,ratio,numericDomain,number,integer,NA,Fv/Fm scaled,NA,NA,NA,NA
+LvRootDryWgt,ratio,numericDomain,gram,integer,NA,Spartina live roots dry weight in g,NA,NA,NA,NA
+DdRootDryWgt,ratio,numericDomain,gram,integer,NA,Spartina dead roots dry weight in g,NA,NA,NA,NA
+LogDdRootDryWgt,ratio,numericDomain,gram,integer,NA,Log of Spartina dead roots dry weight in g,NA,NA,NA,NA
+LvRootDryWgt_Scaled,ratio,numericDomain,gram,integer,NA,Spartina live roots dry weight scaled in g,NA,NA,NA,NA
+Photo_Wk2,ratio,numericDomain,number,integer,NA,photosynthesis as measured in week 2 of experiment,NA,NA,NA,NA
+qN_Wk2,ratio,numericDomain,number,integer,NA,non-photochemical quenching as measured in week 2 of experiment,NA,NA,NA,NA
+Fv.Fm_Wk2,ratio,numericDomain,number,integer,NA,Fv/Fm as measued in week 2 of experiment,NA,NA,NA,NA
+Photo_Wk2_Scaled,ratio,numericDomain,number,integer,NA,photosynthesis as measured in week 2 of experiment scaled,NA,NA,NA,NA
+Fv.Fm_Wk2_Scaled,ratio,numericDomain,number,integer,NA,scaled Fv/Fm as measued in week 2 of experiment,NA,NA,NA,NA

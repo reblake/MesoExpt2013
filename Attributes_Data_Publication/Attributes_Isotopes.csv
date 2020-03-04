@@ -1,0 +1,9 @@
+attributeName,measurementScale,domain,unit,numberType,attributeLabel,attributeDefinition,definition,formatString,missingValueCode,missingValueCodeExplanation
+Week,ratio,numericDomain,number,real,NA,Week of experiment,NA,NA,NA,NA
+Chem,nominal,textDomain,NA,NA,NA,chemical treatment,any text,NA,NA,NA
+Oil,ratio,numericDomain,number,real,NA,oil treatment,NA,NA,NA,NA
+Core,ratio,numericDomain,number,real,NA,dispersant treatment,NA,NA,NA,NA
+Herbivore,nominal,textDomain,NA,NA,NA,herbivore treatment,any text,NA,NA,NA
+d13C,ratio,numericDomain,number,real,NA,delta 13C,NA,NA,NA,NA
+d15N,ratio,numericDomain,number,real,NA,delta 15N,NA,NA,NA,NA
+d34S,ratio,numericDomain,number,real,NA,delta 34S,NA,NA,NA,NA
