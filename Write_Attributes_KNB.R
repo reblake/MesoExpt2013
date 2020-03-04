@@ -40,6 +40,7 @@ shiny_attributes(attributes = Temp_attr)
 
 ###
 # From https://nceas.github.io/datateam-training/training/editing-eml.html
+# Public: http://training.arcticdata.io/materials/arctic-data-center-training/programming-metadata-and-data-publishing.html
 
 cn <- CNode('PROD')
 knb <- getMNode(cn, "urn:node:KNB")
@@ -50,6 +51,7 @@ pkg <- get_package(knb, urn_uuid, file_names = TRUE) # lists out basic metdata f
 dat_files <- read_eml(getObject(knb, pkg$metadata))  # lists out the metadata for data files/figures in package
 
 # make updates to EML document using EML package
+# should be functionalized but for now not
 AllDat_attr_list <- set_attributes(AllDat_attr)
 AllDat_attr_phys <- set_physical("ALL_DATA_SEM_MesoExpt2013.csv")
 
