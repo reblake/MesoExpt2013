@@ -81,11 +81,7 @@ Temp_dataTable <- list(entityName = "Temp_Data_MASTER_MesoExpt2013.csv", attribu
                           physical = Temp_attr_phys)
 
 # set custom units
-custom_units <- data.frame(id = c("Lux", "millimole"), 
-                           unitType = c("flux","mass"), 
-                           parentSI = c("lumen","mole"), 
-                           description = c("SI unit of illuminance", "SI unit equal to a thousandth of a mole"))
-
+custom_units <- read.csv("D:/Documents/LSU/MesoExp_2013/Attributes_Data_Publication/Custom_Units_Sulfide.csv", stringsAsFactors = FALSE)
 
 custom_unitList <- set_unitList(custom_units)
 
