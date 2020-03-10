@@ -5,7 +5,7 @@
 #################################################
 
 library(tidyr) ; library(plyr) ; library(dplyr) ; library(ggplot2) ; library(scales) 
-library(lazyeval) ; library(reshape2)
+library(lazyeval) ; library(reshape2); library(tidyverse)
 
 # All data
 AllD <- read.csv(here::here("ALL_DATA_SEM_MesoExpt2013.csv"))
@@ -80,11 +80,14 @@ names(expstrlist) <- c("LIVE_NG", "LIVE_S", "LIVE_P", "LIVE_SP", "DEAD_NG", "DEA
 # Expected Stressor Effects Function Code: (Additive)
 
 ExpectedStress <- function(dafr) {
-       if (dafr$control<dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)+(dafr$corexit-dafr$control)} else     #positive
-       if (dafr$control>dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control-(dafr$control-dafr$oil)-(dafr$control-dafr$corexit)} else    #negative
-       if (dafr$control>dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)-(dafr$control-dafr$corexit)} else    #oil>control
-       if (dafr$control<dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control+(dafr$corexit-dafr$control)-(dafr$control-dafr$oil)}         #oil<control
-       return (ExpSt)
+       if (dafr$control<dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)+(dafr$corexit-dafr$control); snglst <- "positive"} else    #positive
+       if (dafr$control>dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control-(dafr$control-dafr$oil)-(dafr$control-dafr$corexit); snglst <- "negative"} else    #negative
+       if (dafr$control>dafr$corexit & dafr$control<dafr$oil){ExpSt <- dafr$control+(dafr$oil-dafr$control)-(dafr$control-dafr$corexit); snglst <- "oil>control"} else    #oil>control
+       if (dafr$control<dafr$corexit & dafr$control>dafr$oil){ExpSt <- dafr$control+(dafr$corexit-dafr$control)-(dafr$control-dafr$oil); snglst <- "oil<control"}         #oil<control
+       
+       strs <- data.frame(ExpSt, snglst)
+       strs$snglst <- as.character(strs$snglst)
+       return (strs)
        }
 
 #specify which equation to use
@@ -102,7 +105,48 @@ ExpectedStress <- function(dafr) {
 ExpStrsCalc <- lapply(expstrlist, function(i){ExpectedStress(i)})
 
 
+# combine
+combi <- map2(expstrlist, ExpStrsCalc, bind_cols)
+
+combi_df <- combi %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo")
+
+live_number_shoots <- combi[c(1:4,9:12)] %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
+                      mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), as.integer)
+
+live_num_list <- list(LIVE_NG=live_number_shoots[1,],
+                      LIVE_S=live_number_shoots[2,],
+                      LIVE_P=live_number_shoots[3,],
+                      LIVE_SP=live_number_shoots[4,],  
+                      NUM_NG=live_number_shoots[5,],
+                      NUM_P=live_number_shoots[6,],
+                      NUM_S=live_number_shoots[7,],
+                      NUM_SP=live_number_shoots[8,])
+
+ffunc <- function(x){format(round(x, 2), nsmall = 1)}  # options(digits=2)
+roots_herbs <- combi[c(13:16,21:24)] %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
+               # mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), as.double)
+               mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), ffunc)
+
+root_herb_list <- list(LIVR_NG=roots_herbs[1,],
+                       LIVR_S=roots_herbs[2,],
+                       LIVR_P=roots_herbs[3,],
+                       LIVR_SP=roots_herbs[4,],
+                       PROK_P=roots_herbs[5,],
+                       PROK_SP=roots_herbs[6,],
+                       SNAL_S=roots_herbs[7,],
+                       SNAL_SP=roots_herbs[8,])
 
 
+# write multi-stress
+multistress_eff <- function(dframe){
+         MStEff <- if (dframe$oilcore == dframe$ExpSt){MStEff <- "additive"} else
+                   if ((dframe$snglst %in% c("negative", "oil<control", "oil>control")) & (dframe$oilcore < dframe$ExpSt)){MStEff <- "synergistic"} else
+                   if ((dframe$snglst %in% c("negative", "oil<control", "oil>control")) & (dframe$oilcore > dframe$ExpSt)){MStEff <- "antagonistic"} #else
+                   #if ((dframe$snglst %in% c("positive")) & (dframe$oilcore < dframe$ExpSt)){MStEff <- "antagonistic"}
+         return(MStEff)
+                   }
+
+BIG_ms_combi <- lapply(live_num_list, multistress_eff)
+SMALL_ms_combi <- lapply(root_herb_list, multistress_eff)
 
 
