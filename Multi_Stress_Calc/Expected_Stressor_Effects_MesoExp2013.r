@@ -110,8 +110,11 @@ combi <- map2(expstrlist, ExpStrsCalc, bind_cols)
 
 combi_df <- combi %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo")
 
+ffunc <- function(x){format(round(x, 1), nsmall = 1)} 
 live_number_shoots <- combi[c(1:4,9:12)] %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
-                      mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), as.integer)
+                      mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), ffunc) %>% 
+                      mutate_at(c("oilcore", "ExpSt"), as.numeric) %>% 
+                      mutate_at(c("oilcore", "ExpSt"), round, 0)
 
 live_num_list <- list(LIVE_NG=live_number_shoots[1,],
                       LIVE_S=live_number_shoots[2,],
@@ -122,10 +125,14 @@ live_num_list <- list(LIVE_NG=live_number_shoots[1,],
                       NUM_S=live_number_shoots[7,],
                       NUM_SP=live_number_shoots[8,])
 
-ffunc <- function(x){format(round(x, 2), nsmall = 1)}  # options(digits=2)
+ffunc1 <- function(x){format(round(x, 2), nsmall = 1)}  
+ffunc2 <- function(x){trunc(x*10^1)/10^1}
 roots_herbs <- combi[c(13:16,21:24)] %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
-               # mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), as.double)
-               mutate_at(c("corexit", "control", "oil", "oilcore", "ExpSt"), ffunc)
+               mutate_at(c("corexit", "control", "oil"), ffunc1) %>%
+               mutate_at(c("oilcore", "ExpSt"), ffunc2) %>% 
+               # constrain insect expected values to Zero
+               mutate(ExpSt = ifelse(ExpSt == '-7.7', 0, 
+                                       ifelse(ExpSt == '-1.7', 0, ExpSt)))
 
 root_herb_list <- list(LIVR_NG=roots_herbs[1,],
                        LIVR_S=roots_herbs[2,],
@@ -141,12 +148,16 @@ root_herb_list <- list(LIVR_NG=roots_herbs[1,],
 multistress_eff <- function(dframe){
          MStEff <- if (dframe$oilcore == dframe$ExpSt){MStEff <- "additive"} else
                    if ((dframe$snglst %in% c("negative", "oil<control", "oil>control")) & (dframe$oilcore < dframe$ExpSt)){MStEff <- "synergistic"} else
-                   if ((dframe$snglst %in% c("negative", "oil<control", "oil>control")) & (dframe$oilcore > dframe$ExpSt)){MStEff <- "antagonistic"} #else
-                   #if ((dframe$snglst %in% c("positive")) & (dframe$oilcore < dframe$ExpSt)){MStEff <- "antagonistic"}
+                   if ((dframe$snglst %in% c("negative", "oil<control", "oil>control")) & (dframe$oilcore > dframe$ExpSt)){MStEff <- "antagonistic"} else
+                   if ((dframe$snglst %in% c("positive")) & (dframe$oilcore < dframe$ExpSt)){MStEff <- "antagonistic"}
          return(MStEff)
                    }
 
 BIG_ms_combi <- lapply(live_num_list, multistress_eff)
 SMALL_ms_combi <- lapply(root_herb_list, multistress_eff)
+ms_combi_list <- c(BIG_ms_combi, SMALL_ms_combi)
+
+ms_combi <- ms_combi_list %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
+            dplyr::rename(MS_effect = .x)
 
 
