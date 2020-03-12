@@ -302,7 +302,7 @@ grid.arrange(exp1, exp2, ncol=1, nrow=2)
 
 ##############################
 # Plant Physiology
-source("C:/Users/rblake/Documents/LSU/MesoExp_2013/Analysis/Plants/Photosyn_MesoExpt 2013.r")
+source("./Plants/Photosyn_MesoExpt_2013.r")
 head(PMean)
 head(PMean_L_sub2)
 head(PMean_long)
@@ -368,10 +368,10 @@ whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) +
                  facet_grid(VarType~WeekBb, scales="free", switch="y") +
                  xlab("Herbivore Treatment") + ylab("") + 
                  theme(legend.position = c(.88, .825), 
-                       strip.text.y=element_text(size=14),
-                       panel.margin = unit(0.25, "cm"),
+                       #strip.text.y=element_text(size=14),
+                       panel.spacing = unit(0.25, "cm"),
                        panel.border = element_rect(colour = "black", fill=NA),
-                       strip.text.y = element_text(angle=-90, lineheight=0.5)) +
+                       strip.text.y = element_text(angle=-90, lineheight=0.5, size=14)) +
                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +

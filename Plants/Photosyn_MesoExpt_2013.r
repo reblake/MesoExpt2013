@@ -9,7 +9,7 @@ library(plyr) ; library(ggplot2) ; library(dplyr) ; library(grid) ; library(scal
 library(car) ; library(gridExtra) ; library(tidyr)
 
 # Read in data file of all photosynthesis data
-PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
+PhotoALL <- read.csv("D:/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
 names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
 # dplyr() doesn't like dates, so leaving this column as factors, 
