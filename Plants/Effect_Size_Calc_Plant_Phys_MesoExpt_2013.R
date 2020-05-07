@@ -4,12 +4,14 @@
 ##  Script by Rachael Blake, September 2013                 ##
 ##############################################################
 
+library(tidyverse)
+
 # Reference: Schielzeth H (2010) Simple means to improve the interpretability of regression 
 # coefficients.  Methods in Ecology & Evolution 1:103-113.
 #########################################
 
 # Read in data file of all photosynthesis data
-PhotoALL <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
+PhotoALL <- read.csv("D:/Documents/LSU/MesoExp_2013/LICOR_Files_Meso_Expt/LICOR_PhotosynMeas_MesoExpt_2013.csv", header=TRUE)
 names(PhotoALL) ; head(PhotoALL) ; tail(PhotoALL)
 
 # Taking Mean of the three measurements in each bucket #######
@@ -23,7 +25,16 @@ PMean <- PhotoALL %>%
                        ifelse((Date %in% c("3-Jun","4-Jun","5-Jun","6-Jun")),'Week 3',
                        ifelse((Date %in% c("2-Jul","3-Jul","5-Jul","6-Jul")),'Final (Week 8)',""))))
                 )
+
          
+FinalLight <- PMean %>%
+              filter(MeasType=="Light",
+                     Week == "Final (Week 8)")
+
+InitialLight <- PMean %>%
+                filter(MeasType=="Light",
+                       Week == "Initial (Week 1)")
+
 
 #########################################
 # must read in PMean first, and create Final Light and Final Dark - see above
