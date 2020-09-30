@@ -301,11 +301,25 @@ grid.arrange(exp1, exp2, ncol=1, nrow=2)
 
 
 ##############################
-# Plant Physiology
+# Plant Physiology (including isotopes per revision in Sept 2020)
 source("./Plants/Photosyn_MesoExpt_2013.r")
+source("./Carbon_Isotopes_MS2013.R")
 head(PMean)
 head(PMean_L_sub2)
 head(PMean_long)
+head(SIA_if_data2)
+
+SIA_4merge <- SIA_if_data2 %>% 
+              rename("WeekBb" = "Week", "Corexit" = "Core") %>% 
+              select(-VarType2, -VarType3) %>% 
+              mutate(Oil = ifelse(Oil == 1, "Y", "N"),
+                     Corexit = ifelse(Corexit == 1, "Y", "N")) %>% 
+              mutate(VarType = case_when(VarType == "d13C"~ '"U+03B4""^""13""C"')
+                     # !! paste0("\uU+03B4""^""13""C") := VarType)  
+                     )
+
+PMean_long_d13C <- PMean_long %>% 
+                   full_join(SIA_4merge)
 
 # Fv/Fm
 FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) + 
@@ -362,12 +376,32 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 qPPlot
 
+# c13
+SIA_if_data2$Chem1 <- factor(SIA_if_data2$Chem, levels=c('NC', 'Core', 'Oil', 'OilCore')) # for ordering the plot
+
+c13Plot <- ggplot(data=SIA_if_data2, aes(x=Herbivore, y=Value)) + 
+                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
+                  facet_grid(VarType2+VarType3~Week, scales="free", switch="y", 
+                             labeller=label_bquote( delta ^ .(VarType2) * .(VarType3) )) +
+                  xlab("Herbivore Treatment") + ylab("") + 
+                  theme(legend.position = c(.88, .75),
+                        panel.spacing = unit(0.25, "cm"),
+                        panel.border = element_rect(colour = "black", fill=NA),
+                        strip.text.y = element_text(angle=-90, lineheight=0.5, size=14, 
+                                                    margin = margin(0,0.5,0,0.5, "cm"))) +
+                  scale_fill_grey(start = 1, end = 0, guide=guide_legend(title = NULL),
+                                  breaks=c("NC","Core","Oil","OilCore"),
+                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
+                  scale_x_discrete(breaks=c("NG","P","S","SP"),
+                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+c13Plot
+  
 # all plots
-whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) + 
+whPlot <- ggplot(data=PMean_long_d13C, aes(x=Herbivore, y=Value)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
                  facet_grid(VarType~WeekBb, scales="free", switch="y") +
                  xlab("Herbivore Treatment") + ylab("") + 
-                 theme(legend.position = c(.88, .825), 
+                 theme(legend.position = c(.88, .88), 
                        #strip.text.y=element_text(size=14),
                        panel.spacing = unit(0.25, "cm"),
                        panel.border = element_rect(colour = "black", fill=NA),
@@ -379,10 +413,12 @@ whPlot <- ggplot(data=PMean_long, aes(x=Herbivore, y=Value)) +
                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
 whPlot
   
-
+png("Figure-3-Plant-Phys.png", width = 8.5, height = 11, units = 'in', res = 300)
+# Make plot
+dev.off()
 
 ##############################
-# Isotopes
+
 
 
 
