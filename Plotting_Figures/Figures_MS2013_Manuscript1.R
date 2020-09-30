@@ -314,11 +314,11 @@ SIA_4merge <- SIA_if_data2 %>%
               select(-VarType2, -VarType3) %>% 
               mutate(Oil = ifelse(Oil == 1, "Y", "N"),
                      Corexit = ifelse(Corexit == 1, "Y", "N")) %>% 
-              mutate(VarType = case_when(VarType == "d13C"~ '"U+03B4""^""13""C"')
-                     # !! paste0("\uU+03B4""^""13""C") := VarType)  
-                     )
+              mutate(VarType = case_when(VarType == "d13C"~ 'delta^13*C'))
 
 PMean_long_d13C <- PMean_long %>% 
+                   mutate(VarType = as.character(VarType),
+                          VarType = ifelse(VarType == " \nFv.Fm\n ", " \nFv/Fm\n ", VarType)) %>% 
                    full_join(SIA_4merge)
 
 # Fv/Fm
@@ -399,7 +399,7 @@ c13Plot
 # all plots
 whPlot <- ggplot(data=PMean_long_d13C, aes(x=Herbivore, y=Value)) + 
                  geom_boxplot(aes(fill=Chem1)) + theme_boxplot() +
-                 facet_grid(VarType~WeekBb, scales="free", switch="y") +
+                 facet_grid(VarType~WeekBb, scales="free", switch="y", labeller = label_parsed) +
                  xlab("Herbivore Treatment") + ylab("") + 
                  theme(legend.position = c(.88, .88), 
                        #strip.text.y=element_text(size=14),
