@@ -6,7 +6,7 @@
 
 setwd("C:\\Users\\Rachael\\Documents\\WORK\\LSU\\MesoExp_2013\\")
 
-ALLDATA <- read.csv("ALL DATA_SEM_MesoExpt2013.csv")
+ALLDATA <- read.csv("ALL_DATA_SEM_MesoExpt2013.csv")
 names(ALLDATA)
 str(ALLDATA)
 
@@ -46,6 +46,7 @@ mod11 <- 'TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           LogDeadStemDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled 
           Photo_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           Fv.Fm_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
+          LvRootDryWgt_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           SnailWgtScaled ~  Corexit 
           LogProkAbunScaled ~ Oil '
 # Fit the model (estimate the parameters)
@@ -54,7 +55,7 @@ mod11_fit <- sem(mod11, data=ALLDATA)
 summary(mod11_fit, rsq=T, standardized=T)  # rsq=T means output the r-sqr
 fitMeasures(mod11_fit)
 mi11 <- modindices(mod11_fit) 
-print(mi1[mi1$op == "~",])# extracts mod indicies with "~" operator suggesting adding a path
+print(mi11[mi11$op == "~",])# extracts mod indicies with "~" operator suggesting adding a path
 # plot with standardized coefficients
 library(semPlot)
 semPaths(mod11_fit, "std", layout="tree3", style="lisrel", curvePivot=TRUE)

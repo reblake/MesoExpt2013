@@ -7,7 +7,7 @@ library(plyr) ; library(dplyr) ; library(ggplot2) ; library(grid) ; library(scal
 library(car)
 
 
-SP <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Sp_Biomass/SpBmss_MesoExpt 2013.csv")
+SP <- read.csv("D:/Documents/LSU/MesoExp_2013/Sp_Biomass/SpBmss_MesoExpt 2013.csv")
 head(SP) ; tail(SP) ; names(SP)
 
 HgtMean <- SP %>%

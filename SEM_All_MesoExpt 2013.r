@@ -30,12 +30,12 @@ mod11 <- 'TtlStemNumScaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           LogDeadStemDryWgt ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           Photo_Scaled ~ Oil + Corexit  + SnailWgtScaled + LogProkAbunScaled
           Fv.Fm_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
-          qN ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           LvRootDryWgt_Scaled ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
           SnailWgtScaled ~  Corexit
           LogProkAbunScaled ~ Oil'
+          # qN ~ Oil + Corexit + SnailWgtScaled + LogProkAbunScaled
 # Fit the model (estimate the parameters)
-mod11_fit <- sem(mod11, data=ALLDATA, missing="ml")
+mod11_fit <- sem(mod11, data=ALLDATA) #, missing="ml")
 # Output a summary of the computed results
 summary(mod11_fit, rsq=T, standardized=T)  # rsq=T means output the r-sqr
 fitMeasures(mod11_fit)

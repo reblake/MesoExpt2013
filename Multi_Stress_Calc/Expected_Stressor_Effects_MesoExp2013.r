@@ -158,6 +158,15 @@ SMALL_ms_combi <- lapply(root_herb_list, multistress_eff)
 ms_combi_list <- c(BIG_ms_combi, SMALL_ms_combi)
 
 ms_combi <- ms_combi_list %>% purrr::map_df(~as.data.frame(.x), .id="treat_combo") %>% 
-            dplyr::rename(MS_effect = .x)
+            dplyr::rename(MS_effect = .x) %>% 
+            full_join(live_number_shoots, by = "treat_combo") %>% 
+            left_join(roots_herbs, by = c("treat_combo")) %>% 
+            mutate(corexit = coalesce(corexit.x, corexit.y),
+                   control = coalesce(control.x, control.y),
+                   oil = coalesce(oil.x, oil.y),
+                   oilcore = coalesce(oilcore.x, oilcore.y),
+                   ExpSt = coalesce(ExpSt.x, ExpSt.y),
+                   snglst = coalesce(snglst.x, snglst.y)) %>% 
+            select(-contains("."))
 
 
