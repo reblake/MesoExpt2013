@@ -4,7 +4,7 @@
 ###  July 17, 2013;  Rachael E. Blake           ###
 ###################################################
 
-Sraw <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Sulfides/Sulfide_MesoExpt2013.csv")
+Sraw <- read.csv(here("../Sulfides/Sulfide_MesoExpt2013.csv"))
 head(Sraw)
 tail(Sraw)
 
