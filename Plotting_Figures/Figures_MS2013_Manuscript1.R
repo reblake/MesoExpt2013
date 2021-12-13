@@ -81,18 +81,28 @@ source(here::here("Multi_Stress_Calc/Expected_Stressor_Effects_MesoExp2013.r"))
  
 ExpStrsCalc  # this displays the expected stressor effects
 
+# Dec 2021 revision after 9 journal rejections to add shapes above groups of bars to indicate
+# multi-stressor effect.  This will replace the additional figure in the section below.  
+# Also removing herbivore responses from the final figure.  
+# square(0) = additive
+# circle(1) = synergistic
+# triangle(2) = antagonistic
+
 barcolor <- c("white", "grey70", "grey40", "black")
 baroutline <- c("black","black","black","black")
 dodge <- position_dodge(width=0.9)
 
 L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 31.60692, xend = 1.5, yend = 31.60692), size=1.5) +
             geom_segment(aes(x = 1.5, y = 63.46302, xend = 2.5, yend = 63.46302), size=1.5) +
             geom_segment(aes(x = 2.5, y = 48.94692, xend = 3.5, yend = 48.94692), size=1.5) +
             geom_segment(aes(x = 3.5, y = 38.0773, xend = 4.5, yend = 38.0773), size=1.5) +
-         #   geom_hline(yintercept = 45.52354, color = "black") + 
+            geom_point(aes(x = 1, y = 78), shape = 2, size = 2, fill = "black") + 
+            geom_point(aes(x = 2, y = 78), shape = 0, size = 2, fill = "black") + 
+            geom_point(aes(x = 3, y = 78), shape = 2, size = 2, fill = "black") + 
+            geom_point(aes(x = 4, y = 78), shape = 2, size = 2, fill = "black") + 
             theme_boxplot() + xlab("") + ylab("Live Shoots (g dry weight)") +
             scale_fill_manual(values=barcolor) + labs(title= "a") + 
             scale_colour_manual(values=baroutline) + 
@@ -102,7 +112,7 @@ L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1)) +
 L   
 
 D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 2.1167, xend = 1.5, yend = 2.1167), size=1.5) +
             geom_segment(aes(x = 1.5, y = 3.4922, xend = 2.5, yend = 3.4922), size=1.5) +
@@ -117,12 +127,16 @@ D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1)) +
 D
 
 N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 17, xend = 1.5, yend = 17), size=1.5) +
             geom_segment(aes(x = 1.5, y = 17, xend = 2.5, yend = 17), size=1.5) +
             geom_segment(aes(x = 2.5, y = 13.66667, xend = 3.5, yend = 13.66667), size=1.5) +
             geom_segment(aes(x = 3.5, y = 16.66667, xend = 4.5, yend = 16.66667), size=1.5) +
+            geom_point(aes(x = 1, y = 28), shape = 1, size = 2, fill = "black") + 
+            geom_point(aes(x = 2, y = 28), shape = 1, size = 2, fill = "black") + 
+            geom_point(aes(x = 3, y = 28), shape = 2, size = 2, fill = "black") + 
+            geom_point(aes(x = 4, y = 28), shape = 1, size = 2, fill = "black") + 
             theme_boxplot() + xlab("") + ylab("Number of Shoots") +
             scale_fill_manual(values=barcolor) + labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
@@ -132,12 +146,16 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1)) +
 N
 
 LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 2.553967, xend = 1.5, yend = 2.553967), size=1.5) +
             geom_segment(aes(x = 1.5, y = 2.557233, xend = 2.5, yend = 2.557233), size=1.5) +
             geom_segment(aes(x = 2.5, y = 3.010425, xend = 3.5, yend = 3.010425), size=1.5) +
             geom_segment(aes(x = 3.5, y = 2.58818, xend = 4.5, yend = 2.58818), size=1.5) +
+            geom_point(aes(x = 1, y = 4.25), shape = 2, size = 2, fill = "black") + 
+            geom_point(aes(x = 2, y = 4.25), shape = 0, size = 2, fill = "black") + 
+            geom_point(aes(x = 3, y = 4.25), shape = 2, size = 2, fill = "black") + 
+            geom_point(aes(x = 4, y = 4.25), shape = 1, size = 2, fill = "black") + 
             theme_boxplot() + xlab("") +  ylab("Live Roots (g dry weight)") +
             scale_fill_manual(values=barcolor) + labs(title= "c") + 
             scale_colour_manual(values=baroutline) + 
@@ -147,7 +165,7 @@ LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1)) +
 LR
 
 DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 0.5, y = 0.1316667, xend = 1.5, yend = 0.1316667), size=1.5) +
             geom_segment(aes(x = 1.5, y = 1.6038, xend = 2.5, yend = 1.6038), size=1.5) +
@@ -162,7 +180,7 @@ DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) +
 DR
 
 P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position=dodge, color="black") +
+            stat_summary(fun="mean", geom="bar", position=dodge, color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
             geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
@@ -178,7 +196,7 @@ P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1)) +
 P
 
 S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1)) + 
-            stat_summary(fun.y="mean", geom="bar", position="dodge", color="black") +
+            stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
             geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
             geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
@@ -192,6 +210,10 @@ S
  
 grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
+
+png("Figure-1-three-plots.png", width = 8.5, height = 8.5, units = 'in', res = 300)
+# Make plot
+dev.off()
 
 #####
 # New visuals for stressor effects following 5 editorial journal rejections (7/2/2019)
