@@ -6,7 +6,7 @@
 library(ggplot2) ; library(plyr) ;library(dplyr) ; library(grid) ; library(scales) ; library(reshape2)
 
 
-OI <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/Oiling stuff/OilConc_FINAL_MesoExpt 2013.csv")
+OI <- read.csv("D:/Documents/LSU/MesoExp_2013/Oiling stuff/OilConc_FINAL_MesoExpt 2013.csv")
 head(OI)
 tail(OI)
 names(OI)
@@ -137,7 +137,7 @@ EndOil1 <- arrange(EndOil, Chem, Herbivore)
 EndOil1
 
 # plant data
-Means <- read.csv("C:/Users/rblake/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
+Means <- read.csv("D:/Documents/LSU/MesoExp_2013/ALL_DATA_SEM_MesoExpt2013.csv")
 head(Means)
 str(Means)
 names(Means)

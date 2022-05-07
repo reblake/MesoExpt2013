@@ -62,18 +62,29 @@ Sulf_box <- ggplot(data=Sraw, aes(x=Chem1, y=Conc_ppm, color= Chem1)) +
                    scale_color_grey(start = 0.8, end = 0) +
                    theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
 
-source(here::here("Oil/Oiling_FINAL Data_MesoExpt2013.r"))
+source(here::here("Oil/Oiling_FINAL_Data_MesoExpt2013.r"))
 
 TtlHydro <- ggplot(data=OI_tot, aes(x=Herbivore, y=log_Tot_Hydrocarbon, fill=Chem1)) + 
                  geom_boxplot() + theme_boxplot() + xlab("") + labs(title= "b") +  
                  ylab("Total Hydrocarbons (log)") +
+                 # scale_x_discrete(breaks=c("NG","P","S","SP"),
+                                  # labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) +
+                 # scale_fill_grey(start = 1, end = 0) +
+                 scale_fill_manual(values=barcolor, breaks=c("NC","Core","Oil","OilCore"),
+                                   labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
+                 scale_colour_manual(values=baroutline, breaks=c("NC","Oil","Core","OilCore"),
+                                     labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) +
-                 scale_fill_grey(start = 1, end = 0) +
-                 theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold")) 
+                                  labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
+                 theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                       legend.position=c(.8, 1)) 
 
 
 grid.arrange(Temp_bar, TtlHydro, Light_bar, Sulf_box, ncol=2, nrow=2)
+
+png("Supp-Figure2-Exp_Conditions.png", width = 9, height = 8.5, units = 'in', res = 300)
+# Make plot
+dev.off()
 
 #############################
 # Expected Multi-Stress with biomass and abundances of stems and herbivores
@@ -107,7 +118,7 @@ L <- ggplot(AllD, aes(x=Herbivore, y=LiveStemDryWgt_g, fill=Chem1)) +
             scale_fill_manual(values=barcolor) + labs(title= "a") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 L   
 
@@ -122,7 +133,7 @@ D <- ggplot(AllD, aes(x=Herbivore, y=DeadStemDryWgt_g, fill=Chem1)) +
             scale_fill_manual(values=barcolor) + #labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 D
 
@@ -141,7 +152,7 @@ N <- ggplot(AllD, aes(x=Herbivore, y=TtlStemNum, fill=Chem1)) +
             scale_fill_manual(values=barcolor) + labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 N
 
@@ -156,12 +167,15 @@ LR <- ggplot(AllD, aes(x=Herbivore, y=LvRootDryWgt_Scaled, fill=Chem1)) +
             geom_point(aes(x = 2, y = 4.25), shape = 0, size = 2, fill = "black") + 
             geom_point(aes(x = 3, y = 4.25), shape = 2, size = 2, fill = "black") + 
             geom_point(aes(x = 4, y = 4.25), shape = 1, size = 2, fill = "black") + 
-            theme_boxplot() + xlab("") +  ylab("Live Roots (g dry weight)") +
-            scale_fill_manual(values=barcolor) + labs(title= "c") + 
-            scale_colour_manual(values=baroutline) + 
+            theme_boxplot() + xlab("") +  ylab("Live Roots (g dry weight)") + labs(title= "c") + 
+            scale_fill_manual(values=barcolor, breaks=c("NC","Core","Oil","OilCore"),
+                              labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
+            scale_colour_manual(values=baroutline, breaks=c("NC","Oil","Core","OilCore"),
+                                labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  legend.position=c(1.25, .9))
 LR
 
 DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) + 
@@ -175,36 +189,37 @@ DR <- ggplot(AllD, aes(x=Herbivore, y=DdRootDryWgt, fill=Chem1)) +
             scale_fill_manual(values=barcolor) + #labs(title= "e") +
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
-            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
+            theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
+                  legend.position=c(.2, .8))
 DR
 
 P <- ggplot(AllD, aes(x=Herbivore, y=ProkAbunScaled, fill=Chem1)) + 
             stat_summary(fun="mean", geom="bar", position=dodge, color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
-            geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
-            geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
-            theme_boxplot() + xlab("") + ylab("Number of Insects") + labs(title= "d") +
+            # geom_segment(aes(x = 1.5, y = 0, xend = 2.5, yend = 0), size=1.5) + #constrained to zero; real value -7.734167
+            # geom_segment(aes(x = 3.5, y = 0, xend = 4.5, yend = 0), size=1.5) + #constrained to zero; real value -1.713333
+            theme_boxplot() + xlab("") + ylab("Number of Insects") + labs(title= "a") +
             scale_fill_manual(values=barcolor, breaks=c("NC","Core","Oil","OilCore"),
                               labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
             scale_colour_manual(values=baroutline, breaks=c("NC","Oil","Core","OilCore"),
                               labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"),
-                  legend.position=c(.2, .8))
+                  legend.position=c(0.5, 1))
 P
 
 S <- ggplot(AllD, aes(x=Herbivore, y=SnailWgtScaled, fill=Chem1)) + 
             stat_summary(fun="mean", geom="bar", position="dodge", color="black") +
             stat_summary(fun.data=mean_se, geom="linerange", position=dodge) +
-            geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
-            geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
+            # geom_segment(aes(x = 2.5, y = 1.234111, xend = 3.5, yend = 1.234111), size=1.5) +
+            # geom_segment(aes(x = 3.5, y = 0.3211117, xend = 4.5, yend = 0.3211117), size=1.5) +
             theme_boxplot() + xlab("") + ylab("Change in Snail Mass (g)") +
-            scale_fill_manual(values=barcolor) + labs(title= "e") + 
+            scale_fill_manual(values=barcolor) + labs(title= "b") + 
             scale_colour_manual(values=baroutline) + 
             scale_x_discrete(breaks=c("NG","P","S","SP"),
-                             labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) + 
+                             labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) + 
             theme(plot.title=element_text(size=24, hjust=0.04, vjust=0.5, face="bold"))
 S
  
@@ -212,6 +227,7 @@ grid.arrange(L, N, LR, ncol=2, nrow=2)
 grid.arrange(P, S, ncol=2, nrow=2)
 
 png("Figure-1-three-plots.png", width = 8.5, height = 8.5, units = 'in', res = 300)
+png("Supplement-Figure-Herbivores.png", width = 8.5, height = 8.5, units = 'in', res = 300)
 # Make plot
 dev.off()
 
