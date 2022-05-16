@@ -1,4 +1,6 @@
-## Welcome to GitHub Pages
+## Multi-stressor experiment - 2013
+
+Code for cleaning, analyzing, and visualizing data from a multiple stressor experiment conducted in 2013.
 
 You can use the [editor on GitHub](https://github.com/reblake/MesoExpt2013/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
