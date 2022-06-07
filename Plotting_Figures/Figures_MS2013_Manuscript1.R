@@ -392,7 +392,7 @@ FvFmPlot <- ggplot(data=PMean, aes(x=Herbivore, y=as.numeric(Fv.Fm))) +
                                    breaks=c("NC","Core","Oil","OilCore"),
                                    labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                    scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                    labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                    labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 FvFmPlot
 
 # Photosynthesis
@@ -406,7 +406,7 @@ PhotoPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=Photo)) +
                                     breaks=c("NC","Core","Oil","OilCore"),
                                     labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                     scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                     labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                     labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 PhotoPlot
 
 # qN 
@@ -420,7 +420,7 @@ qNPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qN)) +
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                  labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 qNPlot
 
 # qP
@@ -434,7 +434,7 @@ qPPlot <- ggplot(data=PMean_L_sub2, aes(x=Herbivore, y=qP)) +
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                  labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 qPPlot
 
 # c13
@@ -454,7 +454,7 @@ c13Plot <- ggplot(data=SIA_if_data2, aes(x=Herbivore, y=Value)) +
                                   breaks=c("NC","Core","Oil","OilCore"),
                                   labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                   scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                   labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                   labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 c13Plot
   
 # all plots
@@ -471,7 +471,7 @@ whPlot <- ggplot(data=PMean_long_d13C, aes(x=Herbivore, y=Value)) +
                                  breaks=c("NC","Core","Oil","OilCore"),
                                  labels=c("No Chemicals","Dispersant","Oil","Oil + Dispersant")) +
                  scale_x_discrete(breaks=c("NG","P","S","SP"),
-                                  labels=c("No\nGrazers","Insects","Snails","Insects +\nSnails")) 
+                                  labels=c("No\nHerbivores","Insects","Snails","Insects +\nSnails")) 
 whPlot
   
 png("Figure-3-Plant-Phys.png", width = 8.5, height = 11, units = 'in', res = 300)
